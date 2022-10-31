@@ -1,0 +1,61 @@
+{
+  "name": "underground",
+  "uuid": "e73f29cc-73fa-42b3-befa-76a1a2c7016d",
+  "version": "0.0.1",
+  "creator": {
+    "version": "3.6.1"
+  },
+  "author": {
+    "name": "BreathlessWay",
+    "email": "731005087@qq.com",
+    "url" : "http://breathlessway.com/home"
+  },
+  "description": "a minigame build by cocos",
+  "keywords": [
+    "wechat",
+    "minigame",
+    "typescript",
+    "cocos"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "prepare": "husky install",
+    "release": "standard-version",
+    "am": "git add . && cz && git push",
+    "pretty": "prettier --write assets --ignore-unknown",
+    "lint": "eslint --ext .js,.ts assets/ --fix",
+    "check": "tsc --noEmit --pretty --skipLibCheck"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.5",
+    "lodash.get": "^4.4.2"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.0.3",
+    "@commitlint/config-conventional": "^17.0.3",
+    "@types/lodash.get": "^4.4.7",
+    "@typescript-eslint/eslint-plugin": "^5.33.1",
+    "@typescript-eslint/parser": "^5.33.1",
+    "commitizen": "^4.2.5",
+    "cz-customizable": "^6.9.1",
+    "eslint": "^8.22.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "minigame-api-typings": "^3.6.0",
+    "prettier": "^2.7.1",
+    "standard-version": "^9.5.0",
+    "typescript": "^4.8.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BreathlessWay/minigame-underground.git"
+  },
+  "bugs": {
+    "url": "https://github.com/BreathlessWay/minigame-underground/issues"
+  },
+  "homepage": "https://github.com/BreathlessWay/minigame-underground#readme",
+  "engines": {
+    "node": ">=16.16.0",
+    "npm": ">=8.11.0"
+  }
+}
