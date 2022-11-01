@@ -1,2 +1,1 @@
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+export PATH="/Users/breathlessway/.nvm/versions/node/v16.18.0/bin/:$PATH"

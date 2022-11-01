@@ -1,7 +1,6 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo $PATH
-
+export PATH="/Users/breathlessway/.nvm/versions/node/v16.18.0/bin:$PATH"
 echo "=====================执行pre-commit进行代码格式化========================"
-#npm lint-staged
+pnpm lint-staged
