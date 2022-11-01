@@ -1,4 +1,4 @@
 {
-    "miniprogram/**/*": [ "prettier --write --ignore-unknown" ],
-    "miniprogram/**/*.{ts, js}": [ "eslint --fix" ]
+    "assets/**/*": [ "prettier --write --ignore-unknown" ],
+    "assets/**/*.{ts, js}": [ "eslint --fix" ]
 }
