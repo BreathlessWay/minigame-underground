@@ -1,14 +1,14 @@
 {
   "name": "underground",
   "uuid": "e73f29cc-73fa-42b3-befa-76a1a2c7016d",
-  "version": "0.0.1",
+  "version": "3.6.1",
   "creator": {
     "version": "3.6.1"
   },
   "author": {
     "name": "BreathlessWay",
     "email": "731005087@qq.com",
-    "url" : "http://breathlessway.com/home"
+    "url": "http://breathlessway.com/home"
   },
   "description": "a minigame build by cocos",
   "keywords": [
