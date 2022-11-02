@@ -43,7 +43,7 @@ export class BattleManager extends Component {
 		const tileMapManager = tileMap.addComponent(TileMapManager);
 		await tileMapManager.init();
 
-		// this.adaptPosition();
+		this.adaptPosition();
 	}
 
 	adaptPosition() {
