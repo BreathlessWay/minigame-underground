@@ -1,6 +1,7 @@
 import { _decorator, Component, Node } from "cc";
 
 import { TileMapManager } from "db://assets/scripts/tile/TileMapManager";
+import { PlayerManager } from "db://assets/scripts/player/PlayerManager";
 
 import EventManager from "db://assets/stores/EventManager";
 import DataManager from "db://assets/stores/DataManager";
@@ -30,7 +31,7 @@ export class BattleManager extends Component {
 		EventManager.Instance.off(EVENT_ENUM.NEXT_LEVEL, this.nextLevel);
 	}
 
-	initLevel() {
+	async initLevel() {
 		const levelIndex = DataManager.Instance.levelIndex,
 			level = levels[`level${levelIndex}`];
 
@@ -42,7 +43,8 @@ export class BattleManager extends Component {
 			DataManager.Instance.mapRowCount = this.level.mapInfo.length;
 			DataManager.Instance.mapColumnCount = this.level.mapInfo[0].length;
 
-			this.generateTileMap();
+			await this.generateTileMap();
+			await this.generatePlayer();
 		}
 	}
 
@@ -68,6 +70,13 @@ export class BattleManager extends Component {
 		await tileMapManager.init();
 
 		this.adaptPosition();
+	}
+
+	async generatePlayer() {
+		const player = createUINode();
+		player.setParent(this.stage);
+		const playerManager = player.addComponent(PlayerManager);
+		await playerManager.init();
 	}
 
 	adaptPosition() {
