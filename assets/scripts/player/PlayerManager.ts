@@ -1,23 +1,17 @@
-import {
-	_decorator,
-	Animation,
-	animation,
-	AnimationClip,
-	Component,
-	Sprite,
-	SpriteFrame,
-	UITransform,
-} from "cc";
-
-import ResourceManager from "db://assets/stores/ResourceManager";
+import { _decorator, Component, Sprite, UITransform } from "cc";
 
 import EventManager from "db://assets/stores/EventManager";
 
-import { TILE_HEIGHT, TILE_WIDTH } from "db://assets/scripts/tile/TileManager";
-import { CONTROLLER_ENUM, EVENT_ENUM } from "db://assets/enums";
+import { PlayerStateMachine } from "db://assets/scripts/player/PlayerStateMachine";
 
-const { ccclass, property } = _decorator,
-	ANIMATION_SPEED = 1 / 8;
+import { TILE_HEIGHT, TILE_WIDTH } from "db://assets/scripts/tile/TileManager";
+import {
+	CONTROLLER_ENUM,
+	EVENT_ENUM,
+	PARAMS_NAME_ENUM,
+} from "db://assets/enums";
+
+const { ccclass } = _decorator;
 
 @ccclass("PlayerManager")
 export class PlayerManager extends Component {
@@ -26,6 +20,7 @@ export class PlayerManager extends Component {
 	targetX = 0;
 	targetY = 0;
 	private readonly speed = 1 / 10;
+	fsm: PlayerStateMachine;
 
 	update() {
 		this.updatePosition();
@@ -36,7 +31,16 @@ export class PlayerManager extends Component {
 	}
 
 	async init() {
-		await this.render();
+		const sprite = this.addComponent(Sprite);
+		sprite.sizeMode = Sprite.SizeMode.CUSTOM;
+
+		const transform = this.getComponent(UITransform);
+		transform.setContentSize(TILE_WIDTH * 4, TILE_HEIGHT * 4);
+
+		this.fsm = this.addComponent(PlayerStateMachine);
+		await this.fsm.init();
+		this.fsm.setParams(PARAMS_NAME_ENUM.IDLE, true);
+
 		EventManager.Instance.on(EVENT_ENUM.PLAYER_CTRL, this.move, this);
 	}
 
@@ -77,36 +81,8 @@ export class PlayerManager extends Component {
 		if (direction === CONTROLLER_ENUM.RIGHT) {
 			this.targetX += 1;
 		}
-	}
-
-	async render() {
-		const sprite = this.addComponent(Sprite);
-		sprite.sizeMode = Sprite.SizeMode.CUSTOM;
-
-		const transform = this.getComponent(UITransform);
-		transform.setContentSize(TILE_WIDTH * 4, TILE_HEIGHT * 4);
-
-		const spriteFrameList = await ResourceManager.Instance.loadResource(
-				"texture/player/idle/top"
-			),
-			animationComp = this.addComponent(Animation);
-
-		const animationClip = new AnimationClip();
-
-		const track = new animation.ObjectTrack();
-		track.path = new animation.TrackPath()
-			.toComponent(Sprite)
-			.toProperty("spriteFrame");
-
-		const frames: Array<[number, SpriteFrame]> = spriteFrameList.map(
-			(item, index) => [ANIMATION_SPEED * index, item]
-		);
-		track.channel.curve.assignSorted(frames);
-		// 最后将轨道添加到动画剪辑以应用
-		animationClip.addTrack(track);
-		animationClip.duration = frames.length * ANIMATION_SPEED; // 整个动画剪辑的周期
-		animationClip.wrapMode = AnimationClip.WrapMode.Loop;
-		animationComp.defaultClip = animationClip;
-		animationComp.play();
+		if (direction === CONTROLLER_ENUM.TURNLEFT) {
+			this.fsm.setParams(PARAMS_NAME_ENUM.TURNLEFT, true);
+		}
 	}
 }
