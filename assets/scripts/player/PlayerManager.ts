@@ -30,14 +30,15 @@ export class PlayerManager extends EntityManager {
 		this.fsm = this.addComponent(PlayerStateMachine);
 		await this.fsm.init();
 		super.init({
-			x: 0,
-			y: 0,
+			x: 2,
+			y: 8,
 			type: ENTITY_TYPE_ENUM.PLAYER,
 			direction: DIRECTION_ENUM.TOP,
 			state: ENTITY_STATE_ENUM.IDLE,
 		});
-
-		EventManager.Instance.on(EVENT_ENUM.PLAYER_CTRL, this.move, this);
+		this.targetX = this.x;
+		this.targetY = this.y;
+		EventManager.Instance.on(EVENT_ENUM.PLAYER_CTRL, this.moveHandler, this);
 	}
 
 	updatePosition() {
@@ -62,6 +63,14 @@ export class PlayerManager extends EntityManager {
 			this.x = this.targetX;
 			this.y = this.targetY;
 		}
+	}
+
+	moveHandler(direction: CONTROLLER_ENUM) {
+		if (this.willBlock(direction)) {
+			return;
+		}
+
+		this.move(direction);
 	}
 
 	move(direction: CONTROLLER_ENUM) {
@@ -102,5 +111,69 @@ export class PlayerManager extends EntityManager {
 		// 	}
 		// 	this.state = ENTITY_STATE_ENUM.TURNRIGHT;
 		// }
+	}
+
+	willBlock(direction: CONTROLLER_ENUM) {
+		const { targetX, targetY, direction: _dir } = this,
+			{ tileInfo } = DataManager.Instance;
+
+		if (direction === CONTROLLER_ENUM.TOP) {
+			if (_dir === DIRECTION_ENUM.TOP) {
+				const playerNextY = targetY - 1,
+					weaponNextY = targetY - 2;
+
+				if (playerNextY < 0) {
+					return true;
+				}
+
+				const playerTile = tileInfo[targetX][playerNextY],
+					weaponTile = tileInfo[targetX][weaponNextY];
+
+				if (
+					playerTile &&
+					playerTile.moveable &&
+					(!weaponTile || weaponTile.turnable)
+				) {
+					//
+				} else {
+					return true;
+				}
+			}
+		}
+		if (direction === CONTROLLER_ENUM.TURNLEFT) {
+			let nextX, nextY;
+			if (_dir === DIRECTION_ENUM.TOP) {
+				nextX = targetX - 1;
+				nextY = targetY - 1;
+			}
+			if (_dir === DIRECTION_ENUM.BOTTOM) {
+				nextX = targetX + 1;
+				nextY = targetY + 1;
+			}
+			if (_dir === DIRECTION_ENUM.LEFT) {
+				nextX = targetX - 1;
+				nextY = targetY + 1;
+			}
+			if (_dir === DIRECTION_ENUM.RIGHT) {
+				nextX = targetX + 1;
+				nextY = targetY - 1;
+			}
+
+			const nextTile1 = tileInfo[targetX][nextY],
+				nextTile2 = tileInfo[nextX][targetY],
+				nextTile3 = tileInfo[nextX][nextY];
+
+			if (
+				(!nextTile1 || nextTile1.turnable) &&
+				(!nextTile2 || nextTile2.turnable) &&
+				(!nextTile3 || nextTile3.turnable)
+			) {
+				//
+			} else {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }
