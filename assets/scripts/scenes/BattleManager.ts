@@ -35,6 +35,7 @@ export class BattleManager extends Component {
 			level = levels[`level${levelIndex}`];
 
 		if (level) {
+			this.clearLevel();
 			this.level = level;
 
 			DataManager.Instance.mapInfo = this.level.mapInfo;
@@ -48,6 +49,11 @@ export class BattleManager extends Component {
 	nextLevel() {
 		DataManager.Instance.levelIndex++;
 		this.initLevel();
+	}
+
+	clearLevel() {
+		this.stage.destroyAllChildren();
+		DataManager.Instance.reset();
 	}
 
 	generateStage() {
