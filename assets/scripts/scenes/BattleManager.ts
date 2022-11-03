@@ -5,7 +5,7 @@ import { TileMapManager } from "db://assets/scripts/tile/TileMapManager";
 import { createUINode } from "db://assets/utils";
 
 import levels, { ILevel } from "db://assets/levels";
-import { DataManagerInstance } from "db://assets/stores/DataManager";
+import DataManager from "db://assets/stores/DataManager";
 import { TILE_HEIGHT, TILE_WIDTH } from "db://assets/scripts/tile/TileManager";
 
 const { ccclass } = _decorator;
@@ -24,9 +24,9 @@ export class BattleManager extends Component {
 		if (level) {
 			this.level = level;
 
-			DataManagerInstance.mapInfo = this.level.mapInfo;
-			DataManagerInstance.mapRowCount = this.level.mapInfo.length;
-			DataManagerInstance.mapColumnCount = this.level.mapInfo[0].length;
+			DataManager.Instance.mapInfo = this.level.mapInfo;
+			DataManager.Instance.mapRowCount = this.level.mapInfo.length;
+			DataManager.Instance.mapColumnCount = this.level.mapInfo[0].length;
 
 			this.generateTileMap();
 		}
@@ -47,7 +47,7 @@ export class BattleManager extends Component {
 	}
 
 	adaptPosition() {
-		const { mapRowCount, mapColumnCount } = DataManagerInstance,
+		const { mapRowCount, mapColumnCount } = DataManager.Instance,
 			offsetX = (TILE_WIDTH * mapRowCount) / 2,
 			offsetY = (TILE_HEIGHT * mapColumnCount) / 2 + 100;
 

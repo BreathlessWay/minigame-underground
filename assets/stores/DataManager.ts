@@ -1,9 +1,13 @@
+import Singleton from "db://assets/utils/Singleton";
+
 import { ITile } from "db://assets/levels";
 
-class DataManager {
+export default class DataManager extends Singleton {
+	static get Instance() {
+		return super.GetInstance<DataManager>();
+	}
+
 	mapInfo: Array<Array<ITile>>;
 	mapRowCount: number;
 	mapColumnCount: number;
 }
-
-export const DataManagerInstance = new DataManager();

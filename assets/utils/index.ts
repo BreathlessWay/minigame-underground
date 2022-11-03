@@ -10,3 +10,7 @@ export const createUINode = (name = "") => {
 
 	return node;
 };
+
+export const randomByRange = (start: number, end: number) => {
+	return Math.floor(start + (end - start) * Math.random());
+};
