@@ -7,6 +7,9 @@ import { PlayerStateMachine } from "db://assets/scripts/player/PlayerStateMachin
 import { TILE_HEIGHT, TILE_WIDTH } from "db://assets/scripts/tile/TileManager";
 import {
 	CONTROLLER_ENUM,
+	DIRECTION_ENUM,
+	DIRECTION_ORDER_ENUM,
+	ENTITY_STATE_ENUM,
 	EVENT_ENUM,
 	PARAMS_NAME_ENUM,
 } from "db://assets/enums";
@@ -21,6 +24,27 @@ export class PlayerManager extends Component {
 	targetY = 0;
 	private readonly speed = 1 / 10;
 	fsm: PlayerStateMachine;
+
+	private _direction: DIRECTION_ENUM;
+	private _state: ENTITY_STATE_ENUM;
+
+	get direction() {
+		return this._direction;
+	}
+
+	set direction(value) {
+		this._direction = value;
+		this.fsm.setParams(PARAMS_NAME_ENUM.DIRECTION, DIRECTION_ORDER_ENUM[value]);
+	}
+
+	get state() {
+		return this._state;
+	}
+
+	set state(value) {
+		this._state = value;
+		this.fsm.setParams(value, true);
+	}
 
 	update() {
 		this.updatePosition();
@@ -39,7 +63,7 @@ export class PlayerManager extends Component {
 
 		this.fsm = this.addComponent(PlayerStateMachine);
 		await this.fsm.init();
-		this.fsm.setParams(PARAMS_NAME_ENUM.IDLE, true);
+		this.state = ENTITY_STATE_ENUM.IDLE;
 
 		EventManager.Instance.on(EVENT_ENUM.PLAYER_CTRL, this.move, this);
 	}
@@ -82,7 +106,17 @@ export class PlayerManager extends Component {
 			this.targetX += 1;
 		}
 		if (direction === CONTROLLER_ENUM.TURNLEFT) {
-			this.fsm.setParams(PARAMS_NAME_ENUM.TURNLEFT, true);
+			if (this.direction === DIRECTION_ENUM.TOP) {
+				this.direction = DIRECTION_ENUM.LEFT;
+			} else if (this.direction === DIRECTION_ENUM.LEFT) {
+				this.direction = DIRECTION_ENUM.BOTTOM;
+			} else if (this.direction === DIRECTION_ENUM.BOTTOM) {
+				this.direction = DIRECTION_ENUM.RIGHT;
+			} else if (this.direction === DIRECTION_ENUM.RIGHT) {
+				this.direction = DIRECTION_ENUM.TOP;
+			}
+
+			this.state = ENTITY_STATE_ENUM.TURNLEFT;
 		}
 	}
 }

@@ -1,9 +1,13 @@
 import { _decorator, Animation, AnimationClip } from "cc";
 
 import State from "db://assets/utils/State";
+import {
+	getInitParamsNumber,
+	getInitParamsTrigger,
+	StateMachine,
+} from "db://assets/utils/StateMachine";
 
 import { FSM_PARAM_TYPE_ENUM, PARAMS_NAME_ENUM } from "db://assets/enums";
-import { StateMachine } from "db://assets/utils/StateMachine";
 
 const { ccclass } = _decorator;
 
@@ -11,13 +15,6 @@ export interface IParams {
 	type: FSM_PARAM_TYPE_ENUM;
 	value: boolean | number;
 }
-
-export const getInitParamsTrigger = () => {
-	return {
-		type: FSM_PARAM_TYPE_ENUM.TRIGGER,
-		value: false,
-	};
-};
 
 @ccclass("PlayerStateMachine")
 export class PlayerStateMachine extends StateMachine {
@@ -33,6 +30,7 @@ export class PlayerStateMachine extends StateMachine {
 	initParams() {
 		this.params.set(PARAMS_NAME_ENUM.IDLE, getInitParamsTrigger());
 		this.params.set(PARAMS_NAME_ENUM.TURNLEFT, getInitParamsTrigger());
+		this.params.set(PARAMS_NAME_ENUM.DIRECTION, getInitParamsNumber());
 	}
 
 	initStateMachines() {
@@ -42,7 +40,7 @@ export class PlayerStateMachine extends StateMachine {
 		);
 		this.stateMachines.set(
 			PARAMS_NAME_ENUM.TURNLEFT,
-			new State(this, "texture/player/turnleft/top")
+			new State(this, "texture/player/turnright/top")
 		);
 	}
 
