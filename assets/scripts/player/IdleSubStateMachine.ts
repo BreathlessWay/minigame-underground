@@ -2,7 +2,7 @@ import { AnimationClip } from "cc";
 
 import State from "db://assets/utils/State";
 import { StateMachine } from "db://assets/utils/StateMachine";
-import { SubStateMachine } from "db://assets/utils/SubStateMachine";
+import DirectionSubStateMachine from "db://assets/utils/DirectionSubStateMachine";
 
 import {
 	DIRECTION_ENUM,
@@ -12,7 +12,7 @@ import {
 
 const BASE_URL = "texture/player/idle";
 
-export default class IdleSubStateMachine extends SubStateMachine {
+export default class IdleSubStateMachine extends DirectionSubStateMachine {
 	constructor(fsm: StateMachine) {
 		super(fsm);
 		this.stateMachines.set(
@@ -30,13 +30,6 @@ export default class IdleSubStateMachine extends SubStateMachine {
 		this.stateMachines.set(
 			DIRECTION_ENUM.RIGHT,
 			new State(fsm, `${BASE_URL}/right`, AnimationClip.WrapMode.Loop)
-		);
-	}
-
-	run() {
-		const value = this.fsm.getParams(PARAMS_NAME_ENUM.DIRECTION);
-		this.currentState = this.stateMachines.get(
-			DIRECTION_ORDER_ENUM[value as number]
 		);
 	}
 }

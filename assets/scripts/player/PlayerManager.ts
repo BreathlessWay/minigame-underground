@@ -1,70 +1,40 @@
-import { _decorator, Component, Sprite, UITransform } from "cc";
+import { _decorator } from "cc";
 
 import EventManager from "db://assets/stores/EventManager";
+import { EntityManager } from "db://assets/utils/EntityManager";
 
 import { PlayerStateMachine } from "db://assets/scripts/player/PlayerStateMachine";
-
-import { TILE_HEIGHT, TILE_WIDTH } from "db://assets/scripts/tile/TileManager";
 import {
 	CONTROLLER_ENUM,
 	DIRECTION_ENUM,
-	DIRECTION_ORDER_ENUM,
 	ENTITY_STATE_ENUM,
+	ENTITY_TYPE_ENUM,
 	EVENT_ENUM,
-	PARAMS_NAME_ENUM,
 } from "db://assets/enums";
 
 const { ccclass } = _decorator;
 
 @ccclass("PlayerManager")
-export class PlayerManager extends Component {
-	x = 0;
-	y = 0;
+export class PlayerManager extends EntityManager {
 	targetX = 0;
 	targetY = 0;
 	private readonly speed = 1 / 10;
-	fsm: PlayerStateMachine;
-
-	private _direction: DIRECTION_ENUM;
-	private _state: ENTITY_STATE_ENUM;
-
-	get direction() {
-		return this._direction;
-	}
-
-	set direction(value) {
-		this._direction = value;
-		this.fsm.setParams(PARAMS_NAME_ENUM.DIRECTION, DIRECTION_ORDER_ENUM[value]);
-	}
-
-	get state() {
-		return this._state;
-	}
-
-	set state(value) {
-		this._state = value;
-		this.fsm.setParams(value, true);
-	}
 
 	update() {
 		this.updatePosition();
-		this.node.setPosition(
-			this.x * TILE_WIDTH - TILE_WIDTH * 1.5,
-			-this.y * TILE_HEIGHT + TILE_HEIGHT * 1.5
-		);
+		super.update();
 	}
 
 	async init() {
-		const sprite = this.addComponent(Sprite);
-		sprite.sizeMode = Sprite.SizeMode.CUSTOM;
-
-		const transform = this.getComponent(UITransform);
-		transform.setContentSize(TILE_WIDTH * 4, TILE_HEIGHT * 4);
-
 		this.fsm = this.addComponent(PlayerStateMachine);
 		await this.fsm.init();
-		this.direction = DIRECTION_ENUM.TOP;
-		this.state = ENTITY_STATE_ENUM.IDLE;
+		super.init({
+			x: 0,
+			y: 0,
+			type: ENTITY_TYPE_ENUM.PLAYER,
+			direction: DIRECTION_ENUM.TOP,
+			state: ENTITY_STATE_ENUM.IDLE,
+		});
 
 		EventManager.Instance.on(EVENT_ENUM.PLAYER_CTRL, this.move, this);
 	}
