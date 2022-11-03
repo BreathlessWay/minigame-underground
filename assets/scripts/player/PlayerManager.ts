@@ -74,7 +74,6 @@ export class PlayerManager extends EntityManager {
 	}
 
 	move(direction: CONTROLLER_ENUM) {
-		console.log(DataManager.Instance.tileInfo);
 		if (direction === CONTROLLER_ENUM.TOP) {
 			this.targetY -= 1;
 		}
