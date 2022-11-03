@@ -1,6 +1,7 @@
 import { _decorator, Component, SpriteFrame, Animation } from "cc";
 
 import State from "db://assets/utils/State";
+import { SubStateMachine } from "db://assets/utils/SubStateMachine";
 
 import { FSM_PARAM_TYPE_ENUM } from "db://assets/enums";
 
@@ -27,9 +28,9 @@ export const getInitParamsNumber = () => {
 
 @ccclass("StateMachine")
 export abstract class StateMachine extends Component {
-	private _currentState: State;
+	private _currentState: State | SubStateMachine;
 	params: Map<string, IParams> = new Map();
-	stateMachines: Map<string, State> = new Map();
+	stateMachines: Map<string, State | SubStateMachine> = new Map();
 	animationComp: Animation;
 	waitingList: Array<Promise<SpriteFrame[]>> = [];
 

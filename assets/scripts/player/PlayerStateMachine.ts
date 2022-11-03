@@ -1,11 +1,12 @@
-import { _decorator, Animation, AnimationClip } from "cc";
+import { _decorator, Animation } from "cc";
 
-import State from "db://assets/utils/State";
 import {
 	getInitParamsNumber,
 	getInitParamsTrigger,
 	StateMachine,
 } from "db://assets/utils/StateMachine";
+import IdleSubStateMachine from "db://assets/scripts/player/IdleSubStateMachine";
+import TurnLeftSubStateMachine from "db://assets/scripts/player/TurnLeftSubStateMachine";
 
 import { FSM_PARAM_TYPE_ENUM, PARAMS_NAME_ENUM } from "db://assets/enums";
 
@@ -36,11 +37,11 @@ export class PlayerStateMachine extends StateMachine {
 	initStateMachines() {
 		this.stateMachines.set(
 			PARAMS_NAME_ENUM.IDLE,
-			new State(this, "texture/player/idle/top", AnimationClip.WrapMode.Loop)
+			new IdleSubStateMachine(this)
 		);
 		this.stateMachines.set(
 			PARAMS_NAME_ENUM.TURNLEFT,
-			new State(this, "texture/player/turnright/top")
+			new TurnLeftSubStateMachine(this)
 		);
 	}
 
@@ -64,6 +65,8 @@ export class PlayerStateMachine extends StateMachine {
 				if (this.params.get(PARAMS_NAME_ENUM.IDLE).value) {
 					this.currentState = this.stateMachines.get(PARAMS_NAME_ENUM.IDLE);
 				}
+				// eslint-disable-next-line no-self-assign
+				this.currentState = this.currentState;
 				break;
 			}
 			default: {
