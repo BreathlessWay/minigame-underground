@@ -1,14 +1,9 @@
-import {
-	_decorator,
-	Component,
-	AnimationClip,
-	Animation,
-	SpriteFrame,
-} from "cc";
+import { _decorator, Animation, AnimationClip } from "cc";
 
 import State from "db://assets/utils/State";
 
 import { FSM_PARAM_TYPE_ENUM, PARAMS_NAME_ENUM } from "db://assets/enums";
+import { StateMachine } from "db://assets/utils/StateMachine";
 
 const { ccclass } = _decorator;
 
@@ -25,39 +20,12 @@ export const getInitParamsTrigger = () => {
 };
 
 @ccclass("PlayerStateMachine")
-export class PlayerStateMachine extends Component {
-	private _currentState: State;
-	params: Map<string, IParams> = new Map();
-	stateMachines: Map<string, State> = new Map();
-	animationComp: Animation;
-	waitingList: Array<Promise<SpriteFrame[]>> = [];
-
-	getParams(name: string) {
-		if (this.params.has(name)) {
-			return this.params.get(name).value;
-		}
-	}
-
-	setParams(name: string, value: boolean | number) {
-		if (this.params.has(name)) {
-			this.params.get(name).value = value;
-			this.run();
-		}
-	}
-
-	get currentState() {
-		return this._currentState;
-	}
-
-	set currentState(value) {
-		this._currentState = value;
-		this._currentState.run();
-	}
-
+export class PlayerStateMachine extends StateMachine {
 	async init() {
 		this.animationComp = this.addComponent(Animation);
 		this.initParams();
 		this.initStateMachines();
+		this.initAnimationEvent();
 
 		await Promise.all(this.waitingList);
 	}
@@ -78,14 +46,24 @@ export class PlayerStateMachine extends Component {
 		);
 	}
 
+	initAnimationEvent() {
+		this.animationComp.on(Animation.EventType.FINISHED, () => {
+			const name = this.animationComp.defaultClip.name;
+			const whiteList = ["turn"];
+			if (whiteList.some(_ => name.includes(_))) {
+				this.setParams(PARAMS_NAME_ENUM.IDLE, true);
+			}
+		});
+	}
+
 	run() {
 		switch (this.currentState) {
 			case this.stateMachines.get(PARAMS_NAME_ENUM.TURNLEFT):
 			case this.stateMachines.get(PARAMS_NAME_ENUM.IDLE): {
-				if (this.params.get(PARAMS_NAME_ENUM.TURNLEFT)) {
+				if (this.params.get(PARAMS_NAME_ENUM.TURNLEFT).value) {
 					this.currentState = this.stateMachines.get(PARAMS_NAME_ENUM.TURNLEFT);
 				}
-				if (this.params.get(PARAMS_NAME_ENUM.IDLE)) {
+				if (this.params.get(PARAMS_NAME_ENUM.IDLE).value) {
 					this.currentState = this.stateMachines.get(PARAMS_NAME_ENUM.IDLE);
 				}
 				break;

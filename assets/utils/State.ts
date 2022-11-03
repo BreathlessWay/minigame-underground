@@ -2,7 +2,7 @@ import { AnimationClip, Sprite, animation, SpriteFrame } from "cc";
 
 import ResourceManager from "db://assets/stores/ResourceManager";
 
-import { PlayerStateMachine } from "db://assets/scripts/player/PlayerStateMachine";
+import { StateMachine } from "db://assets/utils/StateMachine";
 
 const ANIMATION_SPEED = 1 / 8;
 
@@ -10,7 +10,7 @@ export default class State {
 	private animationClip: AnimationClip;
 
 	constructor(
-		private fsm: PlayerStateMachine,
+		private fsm: StateMachine,
 		private path: string,
 		private wrapMode = AnimationClip.WrapMode.Normal
 	) {
@@ -37,6 +37,7 @@ export default class State {
 		track.channel.curve.assignSorted(frames);
 		// 最后将轨道添加到动画剪辑以应用
 		animationClip.addTrack(track);
+		animationClip.name = this.path;
 		animationClip.duration = frames.length * ANIMATION_SPEED; // 整个动画剪辑的周期
 		animationClip.wrapMode = this.wrapMode;
 
