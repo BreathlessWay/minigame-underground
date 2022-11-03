@@ -2,11 +2,7 @@ import State from "db://assets/utils/State";
 import { StateMachine } from "db://assets/utils/StateMachine";
 import DirectionSubStateMachine from "db://assets/utils/DirectionSubStateMachine";
 
-import {
-	DIRECTION_ENUM,
-	DIRECTION_ORDER_ENUM,
-	PARAMS_NAME_ENUM,
-} from "db://assets/enums";
+import { DIRECTION_ENUM } from "db://assets/enums";
 
 const BASE_URL = "texture/player/turnleft";
 

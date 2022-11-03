@@ -7,6 +7,7 @@ import {
 } from "db://assets/utils/StateMachine";
 import IdleSubStateMachine from "db://assets/scripts/player/IdleSubStateMachine";
 import TurnLeftSubStateMachine from "db://assets/scripts/player/TurnLeftSubStateMachine";
+import TurnRightSubStateMachine from "db://assets/scripts/player/TurnRightSubStateMachine";
 
 import { FSM_PARAM_TYPE_ENUM, PARAMS_NAME_ENUM } from "db://assets/enums";
 
@@ -31,6 +32,7 @@ export class PlayerStateMachine extends StateMachine {
 	initParams() {
 		this.params.set(PARAMS_NAME_ENUM.IDLE, getInitParamsTrigger());
 		this.params.set(PARAMS_NAME_ENUM.TURNLEFT, getInitParamsTrigger());
+		this.params.set(PARAMS_NAME_ENUM.TURNRIGHT, getInitParamsTrigger());
 		this.params.set(PARAMS_NAME_ENUM.DIRECTION, getInitParamsNumber());
 	}
 
@@ -42,6 +44,10 @@ export class PlayerStateMachine extends StateMachine {
 		this.stateMachines.set(
 			PARAMS_NAME_ENUM.TURNLEFT,
 			new TurnLeftSubStateMachine(this)
+		);
+		this.stateMachines.set(
+			PARAMS_NAME_ENUM.TURNRIGHT,
+			new TurnRightSubStateMachine(this)
 		);
 	}
 
@@ -58,12 +64,18 @@ export class PlayerStateMachine extends StateMachine {
 	run() {
 		switch (this.currentState) {
 			case this.stateMachines.get(PARAMS_NAME_ENUM.TURNLEFT):
+			case this.stateMachines.get(PARAMS_NAME_ENUM.TURNRIGHT):
 			case this.stateMachines.get(PARAMS_NAME_ENUM.IDLE): {
 				if (this.params.get(PARAMS_NAME_ENUM.TURNLEFT).value) {
 					this.currentState = this.stateMachines.get(PARAMS_NAME_ENUM.TURNLEFT);
 				}
 				if (this.params.get(PARAMS_NAME_ENUM.IDLE).value) {
 					this.currentState = this.stateMachines.get(PARAMS_NAME_ENUM.IDLE);
+				}
+				if (this.params.get(PARAMS_NAME_ENUM.TURNRIGHT).value) {
+					this.currentState = this.stateMachines.get(
+						PARAMS_NAME_ENUM.TURNRIGHT
+					);
 				}
 				// eslint-disable-next-line no-self-assign
 				this.currentState = this.currentState;

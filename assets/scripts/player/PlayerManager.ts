@@ -11,6 +11,7 @@ import {
 	ENTITY_TYPE_ENUM,
 	EVENT_ENUM,
 } from "db://assets/enums";
+import DataManager from "db://assets/stores/DataManager";
 
 const { ccclass } = _decorator;
 
@@ -64,6 +65,7 @@ export class PlayerManager extends EntityManager {
 	}
 
 	move(direction: CONTROLLER_ENUM) {
+		console.log(DataManager.Instance.tileInfo);
 		if (direction === CONTROLLER_ENUM.TOP) {
 			this.targetY -= 1;
 		}
@@ -86,8 +88,19 @@ export class PlayerManager extends EntityManager {
 			} else if (this.direction === DIRECTION_ENUM.RIGHT) {
 				this.direction = DIRECTION_ENUM.TOP;
 			}
-
 			this.state = ENTITY_STATE_ENUM.TURNLEFT;
 		}
+		// if (direction === CONTROLLER_ENUM.TURNRIGHT) {
+		// 	if (this.direction === DIRECTION_ENUM.TOP) {
+		// 		this.direction = DIRECTION_ENUM.RIGHT;
+		// 	} else if (this.direction === DIRECTION_ENUM.BOTTOM) {
+		// 		this.direction = DIRECTION_ENUM.LEFT;
+		// 	} else if (this.direction === DIRECTION_ENUM.LEFT) {
+		// 		this.direction = DIRECTION_ENUM.TOP;
+		// 	} else if (this.direction === DIRECTION_ENUM.RIGHT) {
+		// 		this.direction = DIRECTION_ENUM.BOTTOM;
+		// 	}
+		// 	this.state = ENTITY_STATE_ENUM.TURNRIGHT;
+		// }
 	}
 }

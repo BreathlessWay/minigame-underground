@@ -1,4 +1,4 @@
-import { _decorator, Component, SpriteFrame, resources } from "cc";
+import { _decorator, Component } from "cc";
 
 import { TileManager } from "db://assets/scripts/tile/TileManager";
 
@@ -7,7 +7,7 @@ import DataManager from "db://assets/stores/DataManager";
 import { createUINode, randomByRange } from "db://assets/utils";
 import ResourceManager from "db://assets/stores/ResourceManager";
 
-const { ccclass, property } = _decorator;
+const { ccclass } = _decorator;
 
 @ccclass("TileMapManager")
 export class TileMapManager extends Component {
@@ -17,8 +17,11 @@ export class TileMapManager extends Component {
 				"texture/tile/tile"
 			);
 
+		DataManager.Instance.tileInfo = [];
+
 		for (let i = 0, yLen = mapInfo.length; i < yLen; i++) {
 			const column = mapInfo[i];
+			DataManager.Instance.tileInfo[i] = [];
 			for (let j = 0, xLen = column.length; j < xLen; j++) {
 				const { src, type } = column[j];
 				if (src && type) {
@@ -36,7 +39,9 @@ export class TileMapManager extends Component {
 						spriteFrame = spriteFrameList.find(_ => _.name === imgSrc),
 						tileManager = node.addComponent(TileManager);
 
-					tileManager.init(spriteFrame, i, j);
+					tileManager.init(type, spriteFrame, i, j);
+
+					DataManager.Instance.tileInfo[i][j] = tileManager;
 
 					node.setParent(this.node);
 				}

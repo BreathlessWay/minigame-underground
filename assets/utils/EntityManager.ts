@@ -7,6 +7,7 @@ import {
 	DIRECTION_ENUM,
 	DIRECTION_ORDER_ENUM,
 	ENTITY_STATE_ENUM,
+	ENTITY_TYPE_ENUM,
 	PARAMS_NAME_ENUM,
 } from "db://assets/enums";
 import { IEntity } from "db://assets/levels";
@@ -18,6 +19,7 @@ export class EntityManager extends Component {
 	x = 0;
 	y = 0;
 	fsm: PlayerStateMachine;
+	type: ENTITY_TYPE_ENUM;
 
 	private _direction: DIRECTION_ENUM;
 	private _state: ENTITY_STATE_ENUM;
@@ -58,5 +60,6 @@ export class EntityManager extends Component {
 		this.y = params.y;
 		this.direction = params.direction;
 		this.state = params.state;
+		this.type = params.type;
 	}
 }
