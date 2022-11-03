@@ -30,7 +30,7 @@ export class TileMapManager extends Component {
 					) {
 						number += randomByRange(0, 4);
 					}
-					console.log(number);
+
 					const node = createUINode(),
 						imgSrc = `tile (${number})`,
 						spriteFrame = spriteFrameList.find(_ => _.name === imgSrc),

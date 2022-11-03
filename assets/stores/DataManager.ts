@@ -10,4 +10,5 @@ export default class DataManager extends Singleton {
 	mapInfo: Array<Array<ITile>>;
 	mapRowCount: number;
 	mapColumnCount: number;
+	levelIndex = 1;
 }

@@ -2,11 +2,14 @@ import { _decorator, Component, Node } from "cc";
 
 import { TileMapManager } from "db://assets/scripts/tile/TileMapManager";
 
+import EventManager from "db://assets/stores/EventManager";
+import DataManager from "db://assets/stores/DataManager";
+
 import { createUINode } from "db://assets/utils";
 
 import levels, { ILevel } from "db://assets/levels";
-import DataManager from "db://assets/stores/DataManager";
 import { TILE_HEIGHT, TILE_WIDTH } from "db://assets/scripts/tile/TileManager";
+import { EVENT_ENUM } from "db://assets/enums";
 
 const { ccclass } = _decorator;
 
@@ -19,8 +22,18 @@ export class BattleManager extends Component {
 		this.initLevel();
 	}
 
+	onLoad() {
+		EventManager.Instance.on(EVENT_ENUM.NEXT_LEVEL, this.nextLevel, this);
+	}
+
+	onDestroy() {
+		EventManager.Instance.off(EVENT_ENUM.NEXT_LEVEL, this.nextLevel);
+	}
+
 	initLevel() {
-		const level = levels[`level1`];
+		const levelIndex = DataManager.Instance.levelIndex,
+			level = levels[`level${levelIndex}`];
+
 		if (level) {
 			this.level = level;
 
@@ -30,6 +43,11 @@ export class BattleManager extends Component {
 
 			this.generateTileMap();
 		}
+	}
+
+	nextLevel() {
+		DataManager.Instance.levelIndex++;
+		this.initLevel();
 	}
 
 	generateStage() {
