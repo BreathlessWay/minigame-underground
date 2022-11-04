@@ -3,14 +3,16 @@ import { _decorator } from "cc";
 import { EntityManager } from "db://assets/utils/EntityManager";
 
 import { WoodenSkeletonStateMachine } from "db://assets/scripts/woodenskeleton/WoodenSkeletonStateMachine";
+
+import EventManager from "db://assets/stores/EventManager";
+import DataManager from "db://assets/stores/DataManager";
+
 import {
 	DIRECTION_ENUM,
 	ENTITY_STATE_ENUM,
 	ENTITY_TYPE_ENUM,
 	EVENT_ENUM,
 } from "db://assets/enums";
-import EventManager from "db://assets/stores/EventManager";
-import DataManager from "db://assets/stores/DataManager";
 
 const { ccclass } = _decorator;
 
