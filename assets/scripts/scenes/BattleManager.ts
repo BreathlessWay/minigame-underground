@@ -2,6 +2,7 @@ import { _decorator, Component, Node } from "cc";
 
 import { TileMapManager } from "db://assets/scripts/tile/TileMapManager";
 import { PlayerManager } from "db://assets/scripts/player/PlayerManager";
+import { WoodenSkeletonManager } from "db://assets/scripts/woodenskeleton/WoodenSkeletonManager";
 
 import EventManager from "db://assets/stores/EventManager";
 import DataManager from "db://assets/stores/DataManager";
@@ -43,8 +44,9 @@ export class BattleManager extends Component {
 			DataManager.Instance.mapRowCount = this.level.mapInfo.length;
 			DataManager.Instance.mapColumnCount = this.level.mapInfo[0].length;
 
-			await this.generateTileMap();
-			await this.generatePlayer();
+			this.generateTileMap();
+			this.generatePlayer();
+			this.generateEnemys();
 		}
 	}
 
@@ -77,6 +79,13 @@ export class BattleManager extends Component {
 		player.setParent(this.stage);
 		const playerManager = player.addComponent(PlayerManager);
 		await playerManager.init();
+	}
+
+	async generateEnemys() {
+		const enemys = createUINode();
+		enemys.setParent(this.stage);
+		const woodenSkeletonManager = enemys.addComponent(WoodenSkeletonManager);
+		await woodenSkeletonManager.init();
 	}
 
 	adaptPosition() {
