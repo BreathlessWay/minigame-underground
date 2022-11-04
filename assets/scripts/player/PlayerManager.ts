@@ -98,18 +98,18 @@ export class PlayerManager extends EntityManager {
 			}
 			this.state = ENTITY_STATE_ENUM.TURNLEFT;
 		}
-		// if (direction === CONTROLLER_ENUM.TURNRIGHT) {
-		// 	if (this.direction === DIRECTION_ENUM.TOP) {
-		// 		this.direction = DIRECTION_ENUM.RIGHT;
-		// 	} else if (this.direction === DIRECTION_ENUM.BOTTOM) {
-		// 		this.direction = DIRECTION_ENUM.LEFT;
-		// 	} else if (this.direction === DIRECTION_ENUM.LEFT) {
-		// 		this.direction = DIRECTION_ENUM.TOP;
-		// 	} else if (this.direction === DIRECTION_ENUM.RIGHT) {
-		// 		this.direction = DIRECTION_ENUM.BOTTOM;
-		// 	}
-		// 	this.state = ENTITY_STATE_ENUM.TURNRIGHT;
-		// }
+		if (direction === CONTROLLER_ENUM.TURNRIGHT) {
+			if (this.direction === DIRECTION_ENUM.TOP) {
+				this.direction = DIRECTION_ENUM.RIGHT;
+			} else if (this.direction === DIRECTION_ENUM.BOTTOM) {
+				this.direction = DIRECTION_ENUM.LEFT;
+			} else if (this.direction === DIRECTION_ENUM.LEFT) {
+				this.direction = DIRECTION_ENUM.TOP;
+			} else if (this.direction === DIRECTION_ENUM.RIGHT) {
+				this.direction = DIRECTION_ENUM.BOTTOM;
+			}
+			this.state = ENTITY_STATE_ENUM.TURNRIGHT;
+		}
 	}
 
 	willBlock(direction: CONTROLLER_ENUM) {
@@ -497,7 +497,40 @@ export class PlayerManager extends EntityManager {
 				return true;
 			}
 		}
+		if (direction === CONTROLLER_ENUM.TURNRIGHT) {
+			let nextX, nextY;
+			if (_dir === DIRECTION_ENUM.TOP) {
+				//朝上右转的话，右上角三个tile都必须turnable为true
+				nextY = targetY - 1;
+				nextX = targetX + 1;
+			}
+			if (_dir === DIRECTION_ENUM.BOTTOM) {
+				nextY = targetY + 1;
+				nextX = targetX - 1;
+			}
+			if (_dir === DIRECTION_ENUM.LEFT) {
+				nextY = targetY - 1;
+				nextX = targetX - 1;
+			}
+			if (_dir === DIRECTION_ENUM.RIGHT) {
+				nextY = targetY + 1;
+				nextX = targetX + 1;
+			}
 
+			const nextTile1 = tileInfo[targetX][nextY],
+				nextTile2 = tileInfo[nextX][targetY],
+				nextTile3 = tileInfo[nextX][nextY];
+
+			if (
+				(!nextTile1 || nextTile1.turnable) &&
+				(!nextTile2 || nextTile2.turnable) &&
+				(!nextTile3 || nextTile3.turnable)
+			) {
+				//
+			} else {
+				return true;
+			}
+		}
 		return false;
 	}
 }
