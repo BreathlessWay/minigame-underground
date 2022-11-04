@@ -42,7 +42,6 @@ export class DoorManager extends EntityManager {
 			) &&
 			this.state !== ENTITY_STATE_ENUM.DEATH
 		) {
-			console.log(1);
 			this.state = ENTITY_STATE_ENUM.DEATH;
 		}
 	}

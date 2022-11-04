@@ -12,7 +12,13 @@ import { createUINode } from "db://assets/utils";
 
 import levels, { ILevel } from "db://assets/levels";
 import { TILE_HEIGHT, TILE_WIDTH } from "db://assets/scripts/tile/TileManager";
-import { EVENT_ENUM } from "db://assets/enums";
+import {
+	DIRECTION_ENUM,
+	ENTITY_STATE_ENUM,
+	ENTITY_TYPE_ENUM,
+	EVENT_ENUM,
+} from "db://assets/enums";
+import { IronSkeletonManager } from "db://assets/scripts/ironskeleton/IronSkeletonManager";
 
 const { ccclass } = _decorator;
 
@@ -80,7 +86,13 @@ export class BattleManager extends Component {
 		const player = createUINode();
 		player.setParent(this.stage);
 		const playerManager = player.addComponent(PlayerManager);
-		await playerManager.init();
+		await playerManager.init({
+			x: 2,
+			y: 8,
+			type: ENTITY_TYPE_ENUM.PLAYER,
+			direction: DIRECTION_ENUM.TOP,
+			state: ENTITY_STATE_ENUM.IDLE,
+		});
 		DataManager.Instance.player = playerManager;
 		EventManager.Instance.emit(EVENT_ENUM.PLAYER_BORN, true);
 	}
@@ -89,8 +101,26 @@ export class BattleManager extends Component {
 		const enemies = createUINode();
 		enemies.setParent(this.stage);
 		const woodenSkeletonManager = enemies.addComponent(WoodenSkeletonManager);
-		await woodenSkeletonManager.init();
+		await woodenSkeletonManager.init({
+			x: 7,
+			y: 7,
+			type: ENTITY_TYPE_ENUM.SKELETON_WOODEN,
+			direction: DIRECTION_ENUM.TOP,
+			state: ENTITY_STATE_ENUM.IDLE,
+		});
 		DataManager.Instance.enemies.push(woodenSkeletonManager);
+
+		const enemies1 = createUINode();
+		enemies1.setParent(this.stage);
+		const ironSkeletonManager = enemies1.addComponent(IronSkeletonManager);
+		await ironSkeletonManager.init({
+			x: 2,
+			y: 2,
+			type: ENTITY_TYPE_ENUM.SKELETON_IRON,
+			direction: DIRECTION_ENUM.TOP,
+			state: ENTITY_STATE_ENUM.IDLE,
+		});
+		DataManager.Instance.enemies.push(ironSkeletonManager);
 	}
 
 	async generateDoor() {

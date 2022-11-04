@@ -1,85 +1,29 @@
 import { _decorator } from "cc";
 
-import { EntityManager } from "db://assets/utils/EntityManager";
-
 import { WoodenSkeletonStateMachine } from "db://assets/scripts/woodenskeleton/WoodenSkeletonStateMachine";
+
+import { EnemyManager } from "db://assets/utils/EnemyManager";
 
 import EventManager from "db://assets/stores/EventManager";
 import DataManager from "db://assets/stores/DataManager";
 
-import {
-	DIRECTION_ENUM,
-	ENTITY_STATE_ENUM,
-	ENTITY_TYPE_ENUM,
-	EVENT_ENUM,
-} from "db://assets/enums";
+import { ENTITY_STATE_ENUM, EVENT_ENUM } from "db://assets/enums";
+import { IEntity } from "db://assets/levels";
 
 const { ccclass } = _decorator;
 
 @ccclass("WoodenSkeletonManager")
-export class WoodenSkeletonManager extends EntityManager {
-	async init() {
+export class WoodenSkeletonManager extends EnemyManager {
+	async init(params: IEntity) {
 		this.fsm = this.addComponent(WoodenSkeletonStateMachine);
 		await this.fsm.init();
-		super.init({
-			x: 7,
-			y: 7,
-			type: ENTITY_TYPE_ENUM.SKELETON_WOODEN,
-			direction: DIRECTION_ENUM.TOP,
-			state: ENTITY_STATE_ENUM.IDLE,
-		});
-		EventManager.Instance.on(
-			EVENT_ENUM.PLAYER_MOVE_END,
-			this.onChangeDirection,
-			this
-		);
-		EventManager.Instance.on(
-			EVENT_ENUM.PLAYER_BORN,
-			this.onChangeDirection,
-			this
-		);
-
+		super.init(params);
 		EventManager.Instance.on(EVENT_ENUM.PLAYER_MOVE_END, this.onAttack, this);
-		EventManager.Instance.on(EVENT_ENUM.ATTACK_ENEMY, this.onDead, this);
-
-		this.onChangeDirection(true);
 	}
 
 	onDestroy() {
-		EventManager.Instance.off(
-			EVENT_ENUM.PLAYER_MOVE_END,
-			this.onChangeDirection
-		);
-		EventManager.Instance.off(EVENT_ENUM.PLAYER_BORN, this.onChangeDirection);
+		super.onDestroy();
 		EventManager.Instance.off(EVENT_ENUM.PLAYER_MOVE_END, this.onAttack);
-		EventManager.Instance.off(EVENT_ENUM.ATTACK_ENEMY, this.onDead);
-	}
-
-	onChangeDirection(isInit) {
-		if (!DataManager.Instance.player || this.state === ENTITY_STATE_ENUM.DEATH)
-			return;
-
-		const { x: playerX, y: playerY } = DataManager.Instance.player;
-
-		const disX = Math.abs(this.x - playerX),
-			disY = Math.abs(this.y - playerY);
-
-		if (disX === disY && !isInit) return;
-
-		if (playerX <= this.x && playerY <= this.y) {
-			this.direction = disY > disX ? DIRECTION_ENUM.TOP : DIRECTION_ENUM.LEFT;
-		}
-		if (playerX <= this.x && playerY >= this.y) {
-			this.direction =
-				disY > disX ? DIRECTION_ENUM.BOTTOM : DIRECTION_ENUM.LEFT;
-		}
-		if (playerX >= this.x && playerY <= this.y) {
-			this.direction = disY > disX ? DIRECTION_ENUM.TOP : DIRECTION_ENUM.RIGHT;
-		}
-		if (playerX >= this.x && playerY >= this.y) {
-			this.direction =
-				disY > disX ? DIRECTION_ENUM.BOTTOM : DIRECTION_ENUM.RIGHT;
-		}
 	}
 
 	onAttack() {
@@ -105,13 +49,6 @@ export class WoodenSkeletonManager extends EntityManager {
 			);
 		} else {
 			this.state = ENTITY_STATE_ENUM.IDLE;
-		}
-	}
-
-	onDead(id: string) {
-		if (this.state === ENTITY_STATE_ENUM.DEATH) return;
-		if (this.id === id) {
-			this.state = ENTITY_STATE_ENUM.DEATH;
 		}
 	}
 }

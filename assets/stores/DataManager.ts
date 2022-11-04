@@ -3,8 +3,8 @@ import Singleton from "db://assets/utils/Singleton";
 import { ITile } from "db://assets/levels";
 import { TileManager } from "db://assets/scripts/tile/TileManager";
 import { PlayerManager } from "db://assets/scripts/player/PlayerManager";
-import { WoodenSkeletonManager } from "db://assets/scripts/woodenskeleton/WoodenSkeletonManager";
 import { DoorManager } from "db://assets/scripts/door/DoorManager";
+import { EnemyManager } from "db://assets/utils/EnemyManager";
 
 export default class DataManager extends Singleton {
 	static get Instance() {
@@ -27,6 +27,6 @@ export default class DataManager extends Singleton {
 	levelIndex = 1;
 	tileInfo: Array<TileManager[]>;
 	player: PlayerManager;
-	enemies: WoodenSkeletonManager[] = [];
+	enemies: EnemyManager[] = [];
 	door: DoorManager;
 }

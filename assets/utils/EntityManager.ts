@@ -65,4 +65,8 @@ export class EntityManager extends Component {
 		this.state = params.state;
 		this.type = params.type;
 	}
+
+	onDestroy() {
+		//
+	}
 }

@@ -12,6 +12,7 @@ import {
 	EVENT_ENUM,
 } from "db://assets/enums";
 import DataManager from "db://assets/stores/DataManager";
+import { IEntity } from "db://assets/levels";
 
 const { ccclass } = _decorator;
 
@@ -27,16 +28,10 @@ export class PlayerManager extends EntityManager {
 		super.update();
 	}
 
-	async init() {
+	async init(params: IEntity) {
 		this.fsm = this.addComponent(PlayerStateMachine);
 		await this.fsm.init();
-		super.init({
-			x: 2,
-			y: 8,
-			type: ENTITY_TYPE_ENUM.PLAYER,
-			direction: DIRECTION_ENUM.TOP,
-			state: ENTITY_STATE_ENUM.IDLE,
-		});
+		super.init(params);
 		this.targetX = this.x;
 		this.targetY = this.y;
 		EventManager.Instance.on(EVENT_ENUM.PLAYER_CTRL, this.moveHandler, this);
