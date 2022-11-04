@@ -114,12 +114,13 @@ export class PlayerManager extends EntityManager {
 
 	willBlock(direction: CONTROLLER_ENUM) {
 		const { targetX, targetY, direction: _dir } = this,
-			{ tileInfo } = DataManager.Instance;
+			{ tileInfo, mapColumnCount, mapRowCount } = DataManager.Instance;
 
 		if (direction === CONTROLLER_ENUM.TOP) {
+			const playerNextY = targetY - 1;
+
 			if (_dir === DIRECTION_ENUM.TOP) {
-				const playerNextY = targetY - 1,
-					weaponNextY = targetY - 2;
+				const weaponNextY = targetY - 2;
 
 				if (playerNextY < 0) {
 					return true;
@@ -127,6 +128,330 @@ export class PlayerManager extends EntityManager {
 
 				const playerTile = tileInfo[targetX][playerNextY],
 					weaponTile = tileInfo[targetX][weaponNextY];
+
+				if (
+					playerTile &&
+					playerTile.moveable &&
+					(!weaponTile || weaponTile.turnable)
+				) {
+					//
+				} else {
+					return true;
+				}
+			}
+			if (_dir === DIRECTION_ENUM.BOTTOM) {
+				const weaponNextY = targetY;
+
+				if (playerNextY < 0) {
+					return true;
+				}
+
+				const playerTile = tileInfo[targetX][playerNextY],
+					weaponTile = tileInfo[targetX][weaponNextY];
+
+				if (
+					playerTile &&
+					playerTile.moveable &&
+					(!weaponTile || weaponTile.turnable)
+				) {
+					//
+				} else {
+					return true;
+				}
+			}
+			if (_dir === DIRECTION_ENUM.LEFT) {
+				const weaponNextY = targetY - 1,
+					weaponNextX = targetX - 1;
+
+				if (playerNextY < 0) {
+					return true;
+				}
+
+				const playerTile = tileInfo[targetX][playerNextY],
+					weaponTile = tileInfo[weaponNextX][weaponNextY];
+
+				if (
+					playerTile &&
+					playerTile.moveable &&
+					(!weaponTile || weaponTile.turnable)
+				) {
+					//
+				} else {
+					return true;
+				}
+			}
+			if (_dir === DIRECTION_ENUM.RIGHT) {
+				const weaponNextY = targetY - 1,
+					weaponNextX = targetX + 1;
+
+				if (playerNextY < 0) {
+					return true;
+				}
+
+				const playerTile = tileInfo[targetX][playerNextY],
+					weaponTile = tileInfo[weaponNextX][weaponNextY];
+
+				if (
+					playerTile &&
+					playerTile.moveable &&
+					(!weaponTile || weaponTile.turnable)
+				) {
+					//
+				} else {
+					return true;
+				}
+			}
+		}
+		if (direction === CONTROLLER_ENUM.BOTTOM) {
+			const playerNextY = targetY + 1;
+
+			if (_dir === DIRECTION_ENUM.TOP) {
+				const weaponNextY = targetY;
+
+				if (playerNextY > mapColumnCount - 1) {
+					return true;
+				}
+
+				const playerTile = tileInfo[targetX][playerNextY],
+					weaponTile = tileInfo[targetX][weaponNextY];
+
+				if (
+					playerTile &&
+					playerTile.moveable &&
+					(!weaponTile || weaponTile.turnable)
+				) {
+					//
+				} else {
+					return true;
+				}
+			}
+			if (_dir === DIRECTION_ENUM.BOTTOM) {
+				const weaponNextY = targetY + 2;
+
+				if (playerNextY > mapColumnCount - 1) {
+					return true;
+				}
+
+				const playerTile = tileInfo[targetX][playerNextY],
+					weaponTile = tileInfo[targetX][weaponNextY];
+
+				if (
+					playerTile &&
+					playerTile.moveable &&
+					(!weaponTile || weaponTile.turnable)
+				) {
+					//
+				} else {
+					return true;
+				}
+			}
+			if (_dir === DIRECTION_ENUM.LEFT) {
+				const weaponNextY = targetY + 1,
+					weaponNextX = targetX - 1;
+
+				if (playerNextY > mapColumnCount - 1) {
+					return true;
+				}
+
+				const playerTile = tileInfo[targetX][playerNextY],
+					weaponTile = tileInfo[weaponNextX][weaponNextY];
+
+				if (
+					playerTile &&
+					playerTile.moveable &&
+					(!weaponTile || weaponTile.turnable)
+				) {
+					//
+				} else {
+					return true;
+				}
+			}
+			if (_dir === DIRECTION_ENUM.RIGHT) {
+				const weaponNextY = targetY + 1,
+					weaponNextX = targetX + 1;
+
+				if (playerNextY > mapColumnCount - 1) {
+					return true;
+				}
+
+				const playerTile = tileInfo[targetX][playerNextY],
+					weaponTile = tileInfo[weaponNextX][weaponNextY];
+
+				if (
+					playerTile &&
+					playerTile.moveable &&
+					(!weaponTile || weaponTile.turnable)
+				) {
+					//
+				} else {
+					return true;
+				}
+			}
+		}
+		if (direction === CONTROLLER_ENUM.LEFT) {
+			const playerNextX = targetX - 1;
+
+			if (_dir === DIRECTION_ENUM.TOP) {
+				const weaponNextX = targetX - 1,
+					weaponNextY = targetY - 1;
+
+				if (playerNextX < 0) {
+					return true;
+				}
+
+				const playerTile = tileInfo[playerNextX][targetY],
+					weaponTile = tileInfo[weaponNextX][weaponNextY];
+
+				if (
+					playerTile &&
+					playerTile.moveable &&
+					(!weaponTile || weaponTile.turnable)
+				) {
+					//
+				} else {
+					return true;
+				}
+			}
+			if (_dir === DIRECTION_ENUM.BOTTOM) {
+				const weaponNextX = targetX - 1,
+					weaponNextY = targetY + 1;
+
+				if (playerNextX < 0) {
+					return true;
+				}
+
+				const playerTile = tileInfo[playerNextX][targetY],
+					weaponTile = tileInfo[weaponNextX][weaponNextY];
+
+				if (
+					playerTile &&
+					playerTile.moveable &&
+					(!weaponTile || weaponTile.turnable)
+				) {
+					//
+				} else {
+					return true;
+				}
+			}
+			if (_dir === DIRECTION_ENUM.LEFT) {
+				const weaponNextY = targetY,
+					weaponNextX = targetX - 2;
+
+				if (playerNextX < 0) {
+					return true;
+				}
+
+				const playerTile = tileInfo[playerNextX][targetY],
+					weaponTile = tileInfo[weaponNextX][weaponNextY];
+
+				if (
+					playerTile &&
+					playerTile.moveable &&
+					(!weaponTile || weaponTile.turnable)
+				) {
+					//
+				} else {
+					return true;
+				}
+			}
+			if (_dir === DIRECTION_ENUM.RIGHT) {
+				const weaponNextY = targetY,
+					weaponNextX = targetX;
+
+				if (playerNextX < 0) {
+					return true;
+				}
+
+				const playerTile = tileInfo[playerNextX][targetY],
+					weaponTile = tileInfo[weaponNextX][weaponNextY];
+
+				if (
+					playerTile &&
+					playerTile.moveable &&
+					(!weaponTile || weaponTile.turnable)
+				) {
+					//
+				} else {
+					return true;
+				}
+			}
+		}
+		if (direction === CONTROLLER_ENUM.RIGHT) {
+			const playerNextX = targetX + 1;
+
+			if (_dir === DIRECTION_ENUM.TOP) {
+				const weaponNextX = targetX + 1,
+					weaponNextY = targetY - 1;
+
+				if (playerNextX > mapRowCount - 1) {
+					return true;
+				}
+
+				const playerTile = tileInfo[playerNextX][targetY],
+					weaponTile = tileInfo[weaponNextX][weaponNextY];
+
+				if (
+					playerTile &&
+					playerTile.moveable &&
+					(!weaponTile || weaponTile.turnable)
+				) {
+					//
+				} else {
+					return true;
+				}
+			}
+			if (_dir === DIRECTION_ENUM.BOTTOM) {
+				const weaponNextX = targetX + 1,
+					weaponNextY = targetY;
+
+				if (playerNextX > mapRowCount - 1) {
+					return true;
+				}
+
+				const playerTile = tileInfo[playerNextX][targetY],
+					weaponTile = tileInfo[weaponNextX][weaponNextY];
+
+				if (
+					playerTile &&
+					playerTile.moveable &&
+					(!weaponTile || weaponTile.turnable)
+				) {
+					//
+				} else {
+					return true;
+				}
+			}
+			if (_dir === DIRECTION_ENUM.LEFT) {
+				const weaponNextY = targetY,
+					weaponNextX = targetX;
+
+				if (playerNextX > mapRowCount - 1) {
+					return true;
+				}
+
+				const playerTile = tileInfo[playerNextX][targetY],
+					weaponTile = tileInfo[weaponNextX][weaponNextY];
+
+				if (
+					playerTile &&
+					playerTile.moveable &&
+					(!weaponTile || weaponTile.turnable)
+				) {
+					//
+				} else {
+					return true;
+				}
+			}
+			if (_dir === DIRECTION_ENUM.RIGHT) {
+				const weaponNextY = targetY,
+					weaponNextX = targetX + 2;
+
+				if (playerNextX > mapRowCount - 1) {
+					return true;
+				}
+
+				const playerTile = tileInfo[playerNextX][targetY],
+					weaponTile = tileInfo[weaponNextX][weaponNextY];
 
 				if (
 					playerTile &&
