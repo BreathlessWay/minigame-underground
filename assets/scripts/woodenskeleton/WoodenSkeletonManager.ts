@@ -36,29 +36,50 @@ export class WoodenSkeletonManager extends EntityManager {
 			this.onChangeDirection,
 			this
 		);
+
+		EventManager.Instance.on(EVENT_ENUM.PLAYER_MOVE_END, this.onAttack, this);
+
+		this.onChangeDirection(true);
 	}
 
 	onChangeDirection(isInit) {
-		const { x: playX, y: playY } = DataManager.Instance.player;
+		if (!DataManager.Instance.player) return;
 
-		const disX = Math.abs(this.x - playX),
-			disY = Math.abs(this.y - playY);
+		const { x: playerX, y: playerY } = DataManager.Instance.player;
+
+		const disX = Math.abs(this.x - playerX),
+			disY = Math.abs(this.y - playerY);
 
 		if (disX === disY && !isInit) return;
 
-		if (playX <= this.x && playY <= this.y) {
+		if (playerX <= this.x && playerY <= this.y) {
 			this.direction = disY > disX ? DIRECTION_ENUM.TOP : DIRECTION_ENUM.LEFT;
 		}
-		if (playX <= this.x && playY >= this.y) {
+		if (playerX <= this.x && playerY >= this.y) {
 			this.direction =
 				disY > disX ? DIRECTION_ENUM.BOTTOM : DIRECTION_ENUM.LEFT;
 		}
-		if (playX >= this.x && playY <= this.y) {
+		if (playerX >= this.x && playerY <= this.y) {
 			this.direction = disY > disX ? DIRECTION_ENUM.TOP : DIRECTION_ENUM.RIGHT;
 		}
-		if (playX >= this.x && playY >= this.y) {
+		if (playerX >= this.x && playerY >= this.y) {
 			this.direction =
 				disY > disX ? DIRECTION_ENUM.BOTTOM : DIRECTION_ENUM.RIGHT;
+		}
+	}
+
+	onAttack() {
+		if (!DataManager.Instance.player) return;
+
+		const { x: playerX, y: playerY } = DataManager.Instance.player;
+
+		if (
+			(this.x === playerX && Math.abs(this.y - playerY) <= 1) ||
+			(this.y === playerY && Math.abs(this.x - playerX) <= 1)
+		) {
+			this.state = ENTITY_STATE_ENUM.ATTACK;
+		} else {
+			this.state = ENTITY_STATE_ENUM.IDLE;
 		}
 	}
 }
