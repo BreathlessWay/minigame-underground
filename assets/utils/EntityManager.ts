@@ -38,6 +38,7 @@ export class EntityManager extends Component {
 	}
 
 	set state(value) {
+		console.log(value);
 		this._state = value;
 		this.fsm.setParams(value, true);
 	}

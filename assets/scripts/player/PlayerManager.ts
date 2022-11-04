@@ -123,6 +123,7 @@ export class PlayerManager extends EntityManager {
 				const weaponNextY = targetY - 2;
 
 				if (playerNextY < 0) {
+					this.state = ENTITY_STATE_ENUM.BLOCKFRONT;
 					return true;
 				}
 
@@ -136,6 +137,7 @@ export class PlayerManager extends EntityManager {
 				) {
 					//
 				} else {
+					this.state = ENTITY_STATE_ENUM.BLOCKFRONT;
 					return true;
 				}
 			}
@@ -143,6 +145,7 @@ export class PlayerManager extends EntityManager {
 				const weaponNextY = targetY;
 
 				if (playerNextY < 0) {
+					this.state = ENTITY_STATE_ENUM.BLOCKFRONT;
 					return true;
 				}
 
@@ -156,6 +159,7 @@ export class PlayerManager extends EntityManager {
 				) {
 					//
 				} else {
+					this.state = ENTITY_STATE_ENUM.BLOCKFRONT;
 					return true;
 				}
 			}
@@ -164,6 +168,7 @@ export class PlayerManager extends EntityManager {
 					weaponNextX = targetX - 1;
 
 				if (playerNextY < 0) {
+					this.state = ENTITY_STATE_ENUM.BLOCKFRONT;
 					return true;
 				}
 
@@ -177,6 +182,7 @@ export class PlayerManager extends EntityManager {
 				) {
 					//
 				} else {
+					this.state = ENTITY_STATE_ENUM.BLOCKFRONT;
 					return true;
 				}
 			}
@@ -185,6 +191,7 @@ export class PlayerManager extends EntityManager {
 					weaponNextX = targetX + 1;
 
 				if (playerNextY < 0) {
+					this.state = ENTITY_STATE_ENUM.BLOCKFRONT;
 					return true;
 				}
 
@@ -198,6 +205,7 @@ export class PlayerManager extends EntityManager {
 				) {
 					//
 				} else {
+					this.state = ENTITY_STATE_ENUM.BLOCKFRONT;
 					return true;
 				}
 			}
@@ -209,6 +217,7 @@ export class PlayerManager extends EntityManager {
 				const weaponNextY = targetY;
 
 				if (playerNextY > mapColumnCount - 1) {
+					this.state = ENTITY_STATE_ENUM.BLOCKBACK;
 					return true;
 				}
 
@@ -222,6 +231,7 @@ export class PlayerManager extends EntityManager {
 				) {
 					//
 				} else {
+					this.state = ENTITY_STATE_ENUM.BLOCKBACK;
 					return true;
 				}
 			}
@@ -229,6 +239,7 @@ export class PlayerManager extends EntityManager {
 				const weaponNextY = targetY + 2;
 
 				if (playerNextY > mapColumnCount - 1) {
+					this.state = ENTITY_STATE_ENUM.BLOCKBACK;
 					return true;
 				}
 
@@ -242,6 +253,7 @@ export class PlayerManager extends EntityManager {
 				) {
 					//
 				} else {
+					this.state = ENTITY_STATE_ENUM.BLOCKBACK;
 					return true;
 				}
 			}
@@ -250,6 +262,7 @@ export class PlayerManager extends EntityManager {
 					weaponNextX = targetX - 1;
 
 				if (playerNextY > mapColumnCount - 1) {
+					this.state = ENTITY_STATE_ENUM.BLOCKBACK;
 					return true;
 				}
 
@@ -263,6 +276,7 @@ export class PlayerManager extends EntityManager {
 				) {
 					//
 				} else {
+					this.state = ENTITY_STATE_ENUM.BLOCKBACK;
 					return true;
 				}
 			}
@@ -271,6 +285,7 @@ export class PlayerManager extends EntityManager {
 					weaponNextX = targetX + 1;
 
 				if (playerNextY > mapColumnCount - 1) {
+					this.state = ENTITY_STATE_ENUM.BLOCKBACK;
 					return true;
 				}
 
@@ -284,6 +299,7 @@ export class PlayerManager extends EntityManager {
 				) {
 					//
 				} else {
+					this.state = ENTITY_STATE_ENUM.BLOCKBACK;
 					return true;
 				}
 			}
@@ -296,6 +312,7 @@ export class PlayerManager extends EntityManager {
 					weaponNextY = targetY - 1;
 
 				if (playerNextX < 0) {
+					this.state = ENTITY_STATE_ENUM.BLOCKLEFT;
 					return true;
 				}
 
@@ -309,6 +326,7 @@ export class PlayerManager extends EntityManager {
 				) {
 					//
 				} else {
+					this.state = ENTITY_STATE_ENUM.BLOCKLEFT;
 					return true;
 				}
 			}
@@ -317,6 +335,7 @@ export class PlayerManager extends EntityManager {
 					weaponNextY = targetY + 1;
 
 				if (playerNextX < 0) {
+					this.state = ENTITY_STATE_ENUM.BLOCKLEFT;
 					return true;
 				}
 
@@ -330,6 +349,7 @@ export class PlayerManager extends EntityManager {
 				) {
 					//
 				} else {
+					this.state = ENTITY_STATE_ENUM.BLOCKLEFT;
 					return true;
 				}
 			}
@@ -338,6 +358,7 @@ export class PlayerManager extends EntityManager {
 					weaponNextX = targetX - 2;
 
 				if (playerNextX < 0) {
+					this.state = ENTITY_STATE_ENUM.BLOCKLEFT;
 					return true;
 				}
 
@@ -351,6 +372,7 @@ export class PlayerManager extends EntityManager {
 				) {
 					//
 				} else {
+					this.state = ENTITY_STATE_ENUM.BLOCKLEFT;
 					return true;
 				}
 			}
@@ -359,6 +381,7 @@ export class PlayerManager extends EntityManager {
 					weaponNextX = targetX;
 
 				if (playerNextX < 0) {
+					this.state = ENTITY_STATE_ENUM.BLOCKLEFT;
 					return true;
 				}
 
@@ -372,6 +395,7 @@ export class PlayerManager extends EntityManager {
 				) {
 					//
 				} else {
+					this.state = ENTITY_STATE_ENUM.BLOCKLEFT;
 					return true;
 				}
 			}
@@ -384,6 +408,7 @@ export class PlayerManager extends EntityManager {
 					weaponNextY = targetY - 1;
 
 				if (playerNextX > mapRowCount - 1) {
+					this.state = ENTITY_STATE_ENUM.BLOCKRIGHT;
 					return true;
 				}
 
@@ -397,6 +422,7 @@ export class PlayerManager extends EntityManager {
 				) {
 					//
 				} else {
+					this.state = ENTITY_STATE_ENUM.BLOCKRIGHT;
 					return true;
 				}
 			}
@@ -405,6 +431,7 @@ export class PlayerManager extends EntityManager {
 					weaponNextY = targetY;
 
 				if (playerNextX > mapRowCount - 1) {
+					this.state = ENTITY_STATE_ENUM.BLOCKRIGHT;
 					return true;
 				}
 
@@ -418,6 +445,7 @@ export class PlayerManager extends EntityManager {
 				) {
 					//
 				} else {
+					this.state = ENTITY_STATE_ENUM.BLOCKRIGHT;
 					return true;
 				}
 			}
@@ -426,6 +454,7 @@ export class PlayerManager extends EntityManager {
 					weaponNextX = targetX;
 
 				if (playerNextX > mapRowCount - 1) {
+					this.state = ENTITY_STATE_ENUM.BLOCKRIGHT;
 					return true;
 				}
 
@@ -439,6 +468,7 @@ export class PlayerManager extends EntityManager {
 				) {
 					//
 				} else {
+					this.state = ENTITY_STATE_ENUM.BLOCKRIGHT;
 					return true;
 				}
 			}
@@ -447,6 +477,7 @@ export class PlayerManager extends EntityManager {
 					weaponNextX = targetX + 2;
 
 				if (playerNextX > mapRowCount - 1) {
+					this.state = ENTITY_STATE_ENUM.BLOCKRIGHT;
 					return true;
 				}
 
@@ -460,6 +491,7 @@ export class PlayerManager extends EntityManager {
 				) {
 					//
 				} else {
+					this.state = ENTITY_STATE_ENUM.BLOCKRIGHT;
 					return true;
 				}
 			}
@@ -494,6 +526,7 @@ export class PlayerManager extends EntityManager {
 			) {
 				//
 			} else {
+				this.state = ENTITY_STATE_ENUM.BLOCKTURNLEFT;
 				return true;
 			}
 		}
@@ -528,6 +561,7 @@ export class PlayerManager extends EntityManager {
 			) {
 				//
 			} else {
+				this.state = ENTITY_STATE_ENUM.BLOCKTURNRIGHT;
 				return true;
 			}
 		}
