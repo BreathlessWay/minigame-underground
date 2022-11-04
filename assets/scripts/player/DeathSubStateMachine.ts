@@ -1,14 +1,12 @@
-import { AnimationClip } from "cc";
-
 import State from "db://assets/utils/State";
 import { StateMachine } from "db://assets/utils/StateMachine";
 import DirectionSubStateMachine from "db://assets/utils/DirectionSubStateMachine";
 
 import { DIRECTION_ENUM } from "db://assets/enums";
 
-const BASE_URL = "texture/woodenskeleton/attack";
+const BASE_URL = "texture/player/death";
 
-export default class AttackSubStateMachine extends DirectionSubStateMachine {
+export default class DeathSubStateMachine extends DirectionSubStateMachine {
 	constructor(fsm: StateMachine) {
 		super(fsm);
 		this.stateMachines.set(

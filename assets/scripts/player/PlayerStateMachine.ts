@@ -16,6 +16,7 @@ import BlockLeftSubStateMachine from "db://assets/scripts/player/BlockLeftSubSta
 import BlockRightSubStateMachine from "db://assets/scripts/player/BlockRightSubStateMachine";
 import BlockTurnLeftSubStateMachine from "db://assets/scripts/player/BlockTurnLeftSubStateMachine";
 import BlockTurnRightSubStateMachine from "db://assets/scripts/player/BlockTurnRightSubStateMachine";
+import DeathSubStateMachine from "db://assets/scripts/player/DeathSubStateMachine";
 
 import {
 	ENTITY_STATE_ENUM,
@@ -45,6 +46,7 @@ export class PlayerStateMachine extends StateMachine {
 		this.params.set(PARAMS_NAME_ENUM.IDLE, getInitParamsTrigger());
 		this.params.set(PARAMS_NAME_ENUM.TURNLEFT, getInitParamsTrigger());
 		this.params.set(PARAMS_NAME_ENUM.TURNRIGHT, getInitParamsTrigger());
+		this.params.set(PARAMS_NAME_ENUM.DEATH, getInitParamsTrigger());
 
 		this.params.set(PARAMS_NAME_ENUM.BLOCKFRONT, getInitParamsTrigger());
 		this.params.set(PARAMS_NAME_ENUM.BLOCKLEFT, getInitParamsTrigger());
@@ -93,6 +95,10 @@ export class PlayerStateMachine extends StateMachine {
 			PARAMS_NAME_ENUM.BLOCKTURNRIGHT,
 			new BlockTurnRightSubStateMachine(this)
 		);
+		this.stateMachines.set(
+			PARAMS_NAME_ENUM.DEATH,
+			new DeathSubStateMachine(this)
+		);
 	}
 
 	initAnimationEvent() {
@@ -115,9 +121,14 @@ export class PlayerStateMachine extends StateMachine {
 			case this.stateMachines.get(PARAMS_NAME_ENUM.BLOCKRIGHT):
 			case this.stateMachines.get(PARAMS_NAME_ENUM.BLOCKTURNLEFT):
 			case this.stateMachines.get(PARAMS_NAME_ENUM.BLOCKTURNRIGHT):
+			case this.stateMachines.get(PARAMS_NAME_ENUM.DEATH):
 			case this.stateMachines.get(PARAMS_NAME_ENUM.IDLE): {
 				if (this.params.get(PARAMS_NAME_ENUM.IDLE).value) {
 					this.currentState = this.stateMachines.get(PARAMS_NAME_ENUM.IDLE);
+					return;
+				}
+				if (this.params.get(PARAMS_NAME_ENUM.DEATH).value) {
+					this.currentState = this.stateMachines.get(PARAMS_NAME_ENUM.DEATH);
 					return;
 				}
 				if (this.params.get(PARAMS_NAME_ENUM.TURNLEFT).value) {
