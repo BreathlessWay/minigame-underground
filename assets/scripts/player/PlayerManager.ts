@@ -19,6 +19,7 @@ const { ccclass } = _decorator;
 export class PlayerManager extends EntityManager {
 	targetX = 0;
 	targetY = 0;
+	isMoving = false;
 	private readonly speed = 1 / 10;
 
 	update() {
@@ -58,10 +59,13 @@ export class PlayerManager extends EntityManager {
 
 		if (
 			Math.abs(this.targetX - this.x) <= 0.1 &&
-			Math.abs(this.targetY - this.y) <= 0.1
+			Math.abs(this.targetY - this.y) <= 0.1 &&
+			this.isMoving
 		) {
+			this.isMoving = false;
 			this.x = this.targetX;
 			this.y = this.targetY;
+			EventManager.Instance.emit(EVENT_ENUM.PLAYER_MOVE_END);
 		}
 	}
 
@@ -75,15 +79,19 @@ export class PlayerManager extends EntityManager {
 
 	move(direction: CONTROLLER_ENUM) {
 		if (direction === CONTROLLER_ENUM.TOP) {
+			this.isMoving = true;
 			this.targetY -= 1;
 		}
 		if (direction === CONTROLLER_ENUM.BOTTOM) {
+			this.isMoving = true;
 			this.targetY += 1;
 		}
 		if (direction === CONTROLLER_ENUM.LEFT) {
+			this.isMoving = true;
 			this.targetX -= 1;
 		}
 		if (direction === CONTROLLER_ENUM.RIGHT) {
+			this.isMoving = true;
 			this.targetX += 1;
 		}
 		if (direction === CONTROLLER_ENUM.TURNLEFT) {
@@ -97,6 +105,7 @@ export class PlayerManager extends EntityManager {
 				this.direction = DIRECTION_ENUM.TOP;
 			}
 			this.state = ENTITY_STATE_ENUM.TURNLEFT;
+			EventManager.Instance.emit(EVENT_ENUM.PLAYER_MOVE_END);
 		}
 		if (direction === CONTROLLER_ENUM.TURNRIGHT) {
 			if (this.direction === DIRECTION_ENUM.TOP) {
@@ -109,6 +118,7 @@ export class PlayerManager extends EntityManager {
 				this.direction = DIRECTION_ENUM.BOTTOM;
 			}
 			this.state = ENTITY_STATE_ENUM.TURNRIGHT;
+			EventManager.Instance.emit(EVENT_ENUM.PLAYER_MOVE_END);
 		}
 	}
 

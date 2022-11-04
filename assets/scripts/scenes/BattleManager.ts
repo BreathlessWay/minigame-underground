@@ -46,7 +46,7 @@ export class BattleManager extends Component {
 
 			this.generateTileMap();
 			this.generatePlayer();
-			this.generateEnemys();
+			this.generateEnemies();
 		}
 	}
 
@@ -79,13 +79,16 @@ export class BattleManager extends Component {
 		player.setParent(this.stage);
 		const playerManager = player.addComponent(PlayerManager);
 		await playerManager.init();
+		DataManager.Instance.player = playerManager;
+		EventManager.Instance.emit(EVENT_ENUM.PLAYER_BORN, true);
 	}
 
-	async generateEnemys() {
-		const enemys = createUINode();
-		enemys.setParent(this.stage);
-		const woodenSkeletonManager = enemys.addComponent(WoodenSkeletonManager);
+	async generateEnemies() {
+		const enemies = createUINode();
+		enemies.setParent(this.stage);
+		const woodenSkeletonManager = enemies.addComponent(WoodenSkeletonManager);
 		await woodenSkeletonManager.init();
+		DataManager.Instance.enemies.push(woodenSkeletonManager);
 	}
 
 	adaptPosition() {
