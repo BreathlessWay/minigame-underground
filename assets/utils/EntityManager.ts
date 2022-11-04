@@ -30,10 +30,7 @@ export class EntityManager extends Component {
 
 	set direction(value) {
 		this._direction = value;
-		this.fsm.setParams(
-			PARAMS_NAME_ENUM.DIRECTION,
-			DIRECTION_ORDER_ENUM[this._direction]
-		);
+		this.fsm.setParams(PARAMS_NAME_ENUM.DIRECTION, DIRECTION_ORDER_ENUM[value]);
 	}
 
 	get state() {
