@@ -38,12 +38,24 @@ export class WoodenSkeletonManager extends EntityManager {
 		);
 
 		EventManager.Instance.on(EVENT_ENUM.PLAYER_MOVE_END, this.onAttack, this);
+		EventManager.Instance.on(EVENT_ENUM.ATTACK_ENEMY, this.onDead, this);
 
 		this.onChangeDirection(true);
 	}
 
+	onDestroy() {
+		EventManager.Instance.off(
+			EVENT_ENUM.PLAYER_MOVE_END,
+			this.onChangeDirection
+		);
+		EventManager.Instance.off(EVENT_ENUM.PLAYER_BORN, this.onChangeDirection);
+		EventManager.Instance.off(EVENT_ENUM.PLAYER_MOVE_END, this.onAttack);
+		EventManager.Instance.off(EVENT_ENUM.ATTACK_ENEMY, this.onDead);
+	}
+
 	onChangeDirection(isInit) {
-		if (!DataManager.Instance.player) return;
+		if (!DataManager.Instance.player || this.state === ENTITY_STATE_ENUM.DEATH)
+			return;
 
 		const { x: playerX, y: playerY } = DataManager.Instance.player;
 
@@ -69,7 +81,8 @@ export class WoodenSkeletonManager extends EntityManager {
 	}
 
 	onAttack() {
-		if (!DataManager.Instance.player) return;
+		if (!DataManager.Instance.player || this.state === ENTITY_STATE_ENUM.DEATH)
+			return;
 
 		const {
 			x: playerX,
@@ -90,6 +103,13 @@ export class WoodenSkeletonManager extends EntityManager {
 			);
 		} else {
 			this.state = ENTITY_STATE_ENUM.IDLE;
+		}
+	}
+
+	onDead(id: string) {
+		if (this.state === ENTITY_STATE_ENUM.DEATH) return;
+		if (this.id === id) {
+			this.state = ENTITY_STATE_ENUM.DEATH;
 		}
 	}
 }

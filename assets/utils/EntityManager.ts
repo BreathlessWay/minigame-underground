@@ -2,6 +2,8 @@ import { _decorator, Component, Sprite, UITransform } from "cc";
 
 import { StateMachine } from "db://assets/utils/StateMachine";
 
+import { randomByLength } from "db://assets/utils/index";
+
 import { TILE_HEIGHT, TILE_WIDTH } from "db://assets/scripts/tile/TileManager";
 import {
 	DIRECTION_ENUM,
@@ -16,6 +18,7 @@ const { ccclass } = _decorator;
 
 @ccclass("EntityManager")
 export class EntityManager extends Component {
+	id: string = randomByLength(12);
 	x = 0;
 	y = 0;
 	fsm: StateMachine;

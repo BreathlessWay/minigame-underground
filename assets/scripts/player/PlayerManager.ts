@@ -78,11 +78,16 @@ export class PlayerManager extends EntityManager {
 		if (this.isMoving) return;
 		if (
 			this.state === ENTITY_STATE_ENUM.DEATH ||
-			this.state === ENTITY_STATE_ENUM.AIRDEATH
+			this.state === ENTITY_STATE_ENUM.AIRDEATH ||
+			this.state === ENTITY_STATE_ENUM.ATTACK
 		)
 			return;
 
-		if (this.willAttack(direction)) return;
+		const enemyId = this.willAttack(direction);
+		if (enemyId) {
+			EventManager.Instance.emit(EVENT_ENUM.ATTACK_ENEMY, enemyId);
+			return;
+		}
 		if (this.willBlock(direction)) return;
 
 		this.move(direction);
@@ -590,10 +595,12 @@ export class PlayerManager extends EntityManager {
 	}
 
 	willAttack(direction: CONTROLLER_ENUM) {
-		const enemies = DataManager.Instance.enemies;
+		const enemies = DataManager.Instance.enemies.filter(
+			({ state }) => state !== ENTITY_STATE_ENUM.DEATH
+		);
 
 		for (let i = 0, len = enemies.length; i < len; i++) {
-			const { x: enemyX, y: enemyY } = enemies[i];
+			const { x: enemyX, y: enemyY, id: enemyId } = enemies[i];
 			if (
 				direction === CONTROLLER_ENUM.TOP &&
 				this.direction === DIRECTION_ENUM.TOP &&
@@ -601,7 +608,7 @@ export class PlayerManager extends EntityManager {
 				this.targetY - 2 === enemyY
 			) {
 				this.state = ENTITY_STATE_ENUM.ATTACK;
-				return true;
+				return enemyId;
 			}
 
 			if (
@@ -611,7 +618,7 @@ export class PlayerManager extends EntityManager {
 				enemyX === this.x
 			) {
 				this.state = ENTITY_STATE_ENUM.ATTACK;
-				return true;
+				return enemyId;
 			}
 
 			if (
@@ -621,7 +628,7 @@ export class PlayerManager extends EntityManager {
 				enemyX === this.targetX - 2
 			) {
 				this.state = ENTITY_STATE_ENUM.ATTACK;
-				return true;
+				return enemyId;
 			}
 
 			if (
@@ -631,9 +638,9 @@ export class PlayerManager extends EntityManager {
 				enemyX === this.targetX + 2
 			) {
 				this.state = ENTITY_STATE_ENUM.ATTACK;
-				return true;
+				return enemyId;
 			}
 		}
-		return false;
+		return "";
 	}
 }

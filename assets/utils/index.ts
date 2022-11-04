@@ -1,5 +1,11 @@
 import { Node, UITransform, Layers, SpriteFrame } from "cc";
 
+export const randomByLength = (n: number) =>
+	Array.from({ length: n }).reduce<string>(
+		(total: string) => total + Math.floor(Math.random() * 10),
+		""
+	);
+
 export const createUINode = (name = "") => {
 	const node = new Node(name),
 		transform = node.addComponent(UITransform);

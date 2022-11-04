@@ -9,6 +9,7 @@ import {
 } from "db://assets/utils/StateMachine";
 import IdleSubStateMachine from "db://assets/scripts/woodenskeleton/IdleSubStateMachine";
 import AttackSubStateMachine from "db://assets/scripts/woodenskeleton/AttackSubStateMachine";
+import DeathSubStateMachine from "db://assets/scripts/woodenskeleton/DeathSubStateMachine";
 
 import { ENTITY_STATE_ENUM, PARAMS_NAME_ENUM } from "db://assets/enums";
 
@@ -28,6 +29,7 @@ export class WoodenSkeletonStateMachine extends StateMachine {
 	initParams() {
 		this.params.set(PARAMS_NAME_ENUM.IDLE, getInitParamsTrigger());
 		this.params.set(PARAMS_NAME_ENUM.ATTACK, getInitParamsTrigger());
+		this.params.set(PARAMS_NAME_ENUM.DEATH, getInitParamsTrigger());
 		this.params.set(PARAMS_NAME_ENUM.DIRECTION, getInitParamsNumber());
 	}
 
@@ -39,6 +41,10 @@ export class WoodenSkeletonStateMachine extends StateMachine {
 		this.stateMachines.set(
 			PARAMS_NAME_ENUM.ATTACK,
 			new AttackSubStateMachine(this)
+		);
+		this.stateMachines.set(
+			PARAMS_NAME_ENUM.DEATH,
+			new DeathSubStateMachine(this)
 		);
 	}
 
@@ -61,6 +67,10 @@ export class WoodenSkeletonStateMachine extends StateMachine {
 				}
 				if (this.params.get(PARAMS_NAME_ENUM.ATTACK).value) {
 					this.currentState = this.stateMachines.get(PARAMS_NAME_ENUM.ATTACK);
+					return;
+				}
+				if (this.params.get(PARAMS_NAME_ENUM.DEATH).value) {
+					this.currentState = this.stateMachines.get(PARAMS_NAME_ENUM.DEATH);
 					return;
 				}
 				// eslint-disable-next-line no-self-assign
