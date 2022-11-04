@@ -75,13 +75,15 @@ export class PlayerManager extends EntityManager {
 	}
 
 	moveHandler(direction: CONTROLLER_ENUM) {
+		if (this.isMoving) return;
 		if (
 			this.state === ENTITY_STATE_ENUM.DEATH ||
 			this.state === ENTITY_STATE_ENUM.AIRDEATH
 		)
 			return;
+
+		if (this.willAttack(direction)) return;
 		if (this.willBlock(direction)) return;
-		if (this.isMoving) return;
 
 		this.move(direction);
 	}
@@ -581,6 +583,54 @@ export class PlayerManager extends EntityManager {
 				//
 			} else {
 				this.state = ENTITY_STATE_ENUM.BLOCKTURNRIGHT;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	willAttack(direction: CONTROLLER_ENUM) {
+		const enemies = DataManager.Instance.enemies;
+
+		for (let i = 0, len = enemies.length; i < len; i++) {
+			const { x: enemyX, y: enemyY } = enemies[i];
+			if (
+				direction === CONTROLLER_ENUM.TOP &&
+				this.direction === DIRECTION_ENUM.TOP &&
+				this.x === enemyX &&
+				this.targetY - 2 === enemyY
+			) {
+				this.state = ENTITY_STATE_ENUM.ATTACK;
+				return true;
+			}
+
+			if (
+				direction === CONTROLLER_ENUM.BOTTOM &&
+				this.direction === DIRECTION_ENUM.BOTTOM &&
+				enemyY === this.targetY + 2 &&
+				enemyX === this.x
+			) {
+				this.state = ENTITY_STATE_ENUM.ATTACK;
+				return true;
+			}
+
+			if (
+				direction === CONTROLLER_ENUM.LEFT &&
+				this.direction === DIRECTION_ENUM.LEFT &&
+				enemyY === this.y &&
+				enemyX === this.targetX - 2
+			) {
+				this.state = ENTITY_STATE_ENUM.ATTACK;
+				return true;
+			}
+
+			if (
+				direction === CONTROLLER_ENUM.RIGHT &&
+				this.direction === DIRECTION_ENUM.RIGHT &&
+				enemyY === this.y &&
+				enemyX === this.targetX + 2
+			) {
+				this.state = ENTITY_STATE_ENUM.ATTACK;
 				return true;
 			}
 		}

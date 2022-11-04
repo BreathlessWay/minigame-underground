@@ -4,7 +4,7 @@ import DirectionSubStateMachine from "db://assets/utils/DirectionSubStateMachine
 
 import { DIRECTION_ENUM } from "db://assets/enums";
 
-const BASE_URL = "texture/woodenskeleton/attack";
+const BASE_URL = "texture/player/attack";
 
 export default class AttackSubStateMachine extends DirectionSubStateMachine {
 	constructor(fsm: StateMachine) {
