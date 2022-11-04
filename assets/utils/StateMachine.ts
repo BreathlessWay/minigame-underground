@@ -53,6 +53,9 @@ export abstract class StateMachine extends Component {
 	}
 
 	set currentState(value) {
+		if (!value) {
+			return;
+		}
 		this._currentState = value;
 		this._currentState.run();
 	}

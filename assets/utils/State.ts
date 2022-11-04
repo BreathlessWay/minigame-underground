@@ -3,6 +3,7 @@ import { AnimationClip, Sprite, animation, SpriteFrame } from "cc";
 import ResourceManager from "db://assets/stores/ResourceManager";
 
 import { StateMachine } from "db://assets/utils/StateMachine";
+import { sortSpriteFrame } from "db://assets/utils/index";
 
 const ANIMATION_SPEED = 1 / 8;
 
@@ -31,9 +32,10 @@ export default class State {
 			.toComponent(Sprite)
 			.toProperty("spriteFrame");
 
-		const frames: Array<[number, SpriteFrame]> = spriteFrameList.map(
-			(item, index) => [ANIMATION_SPEED * index, item]
-		);
+		const frames: Array<[number, SpriteFrame]> = sortSpriteFrame(
+			spriteFrameList
+		).map((item, index) => [ANIMATION_SPEED * index, item]);
+
 		track.channel.curve.assignSorted(frames);
 		// 最后将轨道添加到动画剪辑以应用
 		animationClip.addTrack(track);
@@ -45,6 +47,10 @@ export default class State {
 	}
 
 	run() {
+		if (this.fsm.animationComp.defaultClip?.name === this.animationClip.name) {
+			return;
+		}
+
 		this.fsm.animationComp.defaultClip = this.animationClip;
 		this.fsm.animationComp.play();
 	}

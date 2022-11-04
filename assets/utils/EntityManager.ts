@@ -1,6 +1,6 @@
 import { _decorator, Component, Sprite, UITransform } from "cc";
 
-import { PlayerStateMachine } from "db://assets/scripts/player/PlayerStateMachine";
+import { StateMachine } from "db://assets/utils/StateMachine";
 
 import { TILE_HEIGHT, TILE_WIDTH } from "db://assets/scripts/tile/TileManager";
 import {
@@ -18,7 +18,7 @@ const { ccclass } = _decorator;
 export class EntityManager extends Component {
 	x = 0;
 	y = 0;
-	fsm: PlayerStateMachine;
+	fsm: StateMachine;
 	type: ENTITY_TYPE_ENUM;
 
 	private _direction: DIRECTION_ENUM;
@@ -30,7 +30,10 @@ export class EntityManager extends Component {
 
 	set direction(value) {
 		this._direction = value;
-		this.fsm.setParams(PARAMS_NAME_ENUM.DIRECTION, DIRECTION_ORDER_ENUM[value]);
+		this.fsm.setParams(
+			PARAMS_NAME_ENUM.DIRECTION,
+			DIRECTION_ORDER_ENUM[this._direction]
+		);
 	}
 
 	get state() {
