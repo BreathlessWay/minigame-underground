@@ -12,21 +12,17 @@ export default class EventManager extends Singleton {
 
 	private eventMap: Map<string, Array<IEventItem>> = new Map();
 
-	on(name: string, func: (...args: unknown[]) => void, ctx?: unknown) {
-		if (this.eventMap.has(name)) {
-			this.eventMap.get(name).push({ func, ctx });
+	on(event: string, func: (...args: unknown[]) => void, ctx?: unknown) {
+		if (this.eventMap.has(event)) {
+			this.eventMap.get(event).push({ func, ctx });
 		} else {
-			this.eventMap.set(name, [{ func, ctx }]);
+			this.eventMap.set(event, [{ func, ctx }]);
 		}
 	}
-
-	off(name: string, func: (...args: unknown[]) => void) {
-		if (this.eventMap.has(name)) {
-			const functionList = this.eventMap.get(name);
-			const filterList = functionList.filter(_ => _.func !== func);
-			if (Array.isArray(filterList) && !filterList.length) {
-				this.eventMap.delete(name);
-			}
+	off(event: string, func: (...args: unknown[]) => void) {
+		if (this.eventMap.has(event)) {
+			const index = this.eventMap.get(event).findIndex(i => func === i.func);
+			index > -1 && this.eventMap.get(event).splice(index, 1);
 		}
 	}
 

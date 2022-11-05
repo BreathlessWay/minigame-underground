@@ -1,7 +1,10 @@
-import { resources, SpriteFrame } from "cc";
+import { resources, SpriteFrame, _decorator } from "cc";
 
 import Singleton from "db://assets/utils/Singleton";
 
+const { ccclass } = _decorator;
+
+@ccclass("BattleManager")
 export default class ResourceManager extends Singleton {
 	static get Instance() {
 		return super.GetInstance<ResourceManager>();
