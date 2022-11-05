@@ -6,6 +6,7 @@ import { WoodenSkeletonManager } from "db://assets/scripts/woodenskeleton/Wooden
 import { DoorManager } from "db://assets/scripts/door/DoorManager";
 import { IronSkeletonManager } from "db://assets/scripts/ironskeleton/IronSkeletonManager";
 import { BurstManager } from "db://assets/scripts/burst/BurstManager";
+import { SpikesManager } from "db://assets/scripts/spikes/SpikesManager";
 
 import EventManager from "db://assets/stores/EventManager";
 import DataManager from "db://assets/stores/DataManager";
@@ -56,8 +57,10 @@ export class BattleManager extends Component {
 				this.generateTileMap(),
 				this.generateDoor(),
 				this.generateBursts(),
+				this.generateSpikes(),
 				this.generateEnemies(),
 			]);
+			// 如果不先将其他元素渲染出来，人物元素可能会被其他元素遮挡
 			this.generatePlayer();
 		}
 	}
@@ -153,18 +156,19 @@ export class BattleManager extends Component {
 			state: ENTITY_STATE_ENUM.IDLE,
 		});
 		DataManager.Instance.bursts.push(burstManager);
+	}
 
-		const bursts1 = createUINode();
-		bursts1.setParent(this.stage);
-		const burstManager1 = bursts1.addComponent(BurstManager);
-		await burstManager1.init({
+	async generateSpikes() {
+		const spikes = createUINode();
+		spikes.setParent(this.stage);
+		const spikesManager = spikes.addComponent(SpikesManager);
+		await spikesManager.init({
 			x: 1,
 			y: 6,
-			type: ENTITY_TYPE_ENUM.BURST,
-			direction: DIRECTION_ENUM.TOP,
-			state: ENTITY_STATE_ENUM.IDLE,
+			type: ENTITY_TYPE_ENUM.SPIKES_ONE,
+			count: 0,
 		});
-		DataManager.Instance.bursts.push(burstManager1);
+		DataManager.Instance.spikes.push(spikesManager);
 	}
 
 	adaptPosition() {

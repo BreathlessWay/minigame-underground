@@ -6,6 +6,7 @@ import { PlayerManager } from "db://assets/scripts/player/PlayerManager";
 import { DoorManager } from "db://assets/scripts/door/DoorManager";
 import { EnemyManager } from "db://assets/utils/EnemyManager";
 import { BurstManager } from "db://assets/scripts/burst/BurstManager";
+import { SpikesManager } from "db://assets/scripts/spikes/SpikesManager";
 
 export default class DataManager extends Singleton {
 	static get Instance() {
@@ -19,6 +20,7 @@ export default class DataManager extends Singleton {
 		this.player = null;
 		this.enemies = [];
 		this.bursts = [];
+		this.spikes = [];
 		this.tileInfo = null;
 		this.door = null;
 	}
@@ -31,5 +33,6 @@ export default class DataManager extends Singleton {
 	player: PlayerManager;
 	enemies: EnemyManager[] = [];
 	bursts: BurstManager[] = [];
+	spikes: SpikesManager[] = [];
 	door: DoorManager;
 }
