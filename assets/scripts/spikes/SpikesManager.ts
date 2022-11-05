@@ -3,10 +3,15 @@ import { _decorator, Component, Sprite, UITransform } from "cc";
 import { StateMachine } from "db://assets/utils/StateMachine";
 import { SpikesStateMachine } from "db://assets/scripts/spikes/SpikesStateMachine";
 
+import EventManager from "db://assets/stores/EventManager";
+import DataManager from "db://assets/stores/DataManager";
+
 import { randomByLength } from "db://assets/utils";
 
 import {
+	ENTITY_STATE_ENUM,
 	ENTITY_TYPE_ENUM,
+	EVENT_ENUM,
 	PARAMS_NAME_ENUM,
 	SPIKES_TYPE_MAP_TOTAL_COUNT_ENUM,
 } from "db://assets/enums";
@@ -56,6 +61,37 @@ export class SpikesManager extends Component {
 		const type = params.type;
 		this.totalCount = SPIKES_TYPE_MAP_TOTAL_COUNT_ENUM[type];
 		this.count = params.count;
+
+		EventManager.Instance.on(EVENT_ENUM.PLAYER_MOVE_END, this.onLoop, this);
+	}
+
+	onLoop() {
+		if (this.count === this.totalCount) {
+			this.count = 1;
+		} else {
+			this.count++;
+		}
+
+		this.onAttack();
+	}
+
+	back() {
+		this.count = 0;
+	}
+
+	onAttack() {
+		if (!DataManager.Instance.player) return;
+		const { x: playerX, y: playerY } = DataManager.Instance.player;
+		if (
+			playerX === this.x &&
+			playerY === this.y &&
+			this.count === this.totalCount
+		) {
+			EventManager.Instance.emit(
+				EVENT_ENUM.ATTACK_PLAYER,
+				ENTITY_STATE_ENUM.DEATH
+			);
+		}
 	}
 
 	update() {
@@ -66,6 +102,6 @@ export class SpikesManager extends Component {
 	}
 
 	onDestroy() {
-		//
+		EventManager.Instance.off(EVENT_ENUM.PLAYER_MOVE_END, this.onLoop);
 	}
 }

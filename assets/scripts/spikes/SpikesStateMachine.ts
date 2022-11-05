@@ -15,6 +15,7 @@ import {
 	PARAMS_NAME_ENUM,
 	SPIKES_TYPE_MAP_TOTAL_COUNT_ENUM,
 } from "db://assets/enums";
+import { SpikesManager } from "db://assets/scripts/spikes/SpikesManager";
 
 const { ccclass } = _decorator;
 
@@ -54,13 +55,23 @@ export class SpikesStateMachine extends StateMachine {
 	}
 
 	initAnimationEvent() {
-		// this.animationComp.on(Animation.EventType.FINISHED, () => {
-		// 	const name = this.animationComp.defaultClip.name;
-		// 	const whiteList = ["attack"];
-		// 	if (whiteList.some(_ => name.includes(_))) {
-		// 		this.node.getComponent(EntityManager).state = ENTITY_STATE_ENUM.IDLE;
-		// 	}
-		// });
+		this.animationComp.on(Animation.EventType.FINISHED, () => {
+			const name = this.animationComp.defaultClip.name;
+			const { value } = this.params.get(PARAMS_NAME_ENUM.SPIKES_TOTAL_COUNT);
+			//例如1个刺的地裂，在播放完1刺之后，回到0的状态
+			if (
+				(value === SPIKES_TYPE_MAP_TOTAL_COUNT_ENUM.SPIKES_ONE &&
+					name.includes("spikesone/two")) ||
+				(value === SPIKES_TYPE_MAP_TOTAL_COUNT_ENUM.SPIKES_TWO &&
+					name.includes("spikestwo/three")) ||
+				(value === SPIKES_TYPE_MAP_TOTAL_COUNT_ENUM.SPIKES_THREE &&
+					name.includes("spikesthree/four")) ||
+				(value === SPIKES_TYPE_MAP_TOTAL_COUNT_ENUM.SPIKES_FOUR &&
+					name.includes("spikesfour/five"))
+			) {
+				this.node.getComponent(SpikesManager).back();
+			}
+		});
 	}
 
 	run() {

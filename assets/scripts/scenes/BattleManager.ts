@@ -156,6 +156,17 @@ export class BattleManager extends Component {
 			state: ENTITY_STATE_ENUM.IDLE,
 		});
 		DataManager.Instance.bursts.push(burstManager);
+		const bursts1 = createUINode();
+		bursts1.setParent(this.stage);
+		const burstManager1 = bursts1.addComponent(BurstManager);
+		await burstManager1.init({
+			x: 1,
+			y: 6,
+			type: ENTITY_TYPE_ENUM.BURST,
+			direction: DIRECTION_ENUM.TOP,
+			state: ENTITY_STATE_ENUM.IDLE,
+		});
+		DataManager.Instance.bursts.push(burstManager1);
 	}
 
 	async generateSpikes() {
@@ -164,7 +175,7 @@ export class BattleManager extends Component {
 		const spikesManager = spikes.addComponent(SpikesManager);
 		await spikesManager.init({
 			x: 1,
-			y: 6,
+			y: 4,
 			type: ENTITY_TYPE_ENUM.SPIKES_FOUR,
 			count: 0,
 		});
