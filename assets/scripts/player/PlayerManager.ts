@@ -95,22 +95,35 @@ export class PlayerManager extends EntityManager {
 		this.move(direction);
 	}
 
+	showSmoke(direction: DIRECTION_ENUM) {
+		EventManager.Instance.emit(
+			EVENT_ENUM.SHOW_SMOKE,
+			this.x,
+			this.y,
+			direction
+		);
+	}
+
 	move(direction: CONTROLLER_ENUM) {
 		if (direction === CONTROLLER_ENUM.TOP) {
 			this.isMoving = true;
 			this.targetY -= 1;
+			this.showSmoke(DIRECTION_ENUM.TOP);
 		}
 		if (direction === CONTROLLER_ENUM.BOTTOM) {
 			this.isMoving = true;
 			this.targetY += 1;
+			this.showSmoke(DIRECTION_ENUM.BOTTOM);
 		}
 		if (direction === CONTROLLER_ENUM.LEFT) {
 			this.isMoving = true;
 			this.targetX -= 1;
+			this.showSmoke(DIRECTION_ENUM.LEFT);
 		}
 		if (direction === CONTROLLER_ENUM.RIGHT) {
 			this.isMoving = true;
 			this.targetX += 1;
+			this.showSmoke(DIRECTION_ENUM.RIGHT);
 		}
 		if (direction === CONTROLLER_ENUM.TURNLEFT) {
 			if (this.direction === DIRECTION_ENUM.TOP) {

@@ -5,7 +5,7 @@ import ResourceManager from "db://assets/stores/ResourceManager";
 import { StateMachine } from "db://assets/utils/StateMachine";
 import { sortSpriteFrame } from "db://assets/utils/index";
 
-const ANIMATION_SPEED = 1 / 8;
+export const ANIMATION_SPEED = 1 / 8;
 
 export default class State {
 	private animationClip: AnimationClip;
@@ -13,7 +13,8 @@ export default class State {
 	constructor(
 		private fsm: StateMachine,
 		private path: string,
-		private wrapMode = AnimationClip.WrapMode.Normal
+		private wrapMode = AnimationClip.WrapMode.Normal,
+		private speed = ANIMATION_SPEED
 	) {
 		this.init();
 	}
@@ -34,13 +35,13 @@ export default class State {
 
 		const frames: Array<[number, SpriteFrame]> = sortSpriteFrame(
 			spriteFrameList
-		).map((item, index) => [ANIMATION_SPEED * index, item]);
+		).map((item, index) => [this.speed * index, item]);
 
 		track.channel.curve.assignSorted(frames);
 		// 最后将轨道添加到动画剪辑以应用
 		animationClip.addTrack(track);
 		animationClip.name = this.path;
-		animationClip.duration = frames.length * ANIMATION_SPEED; // 整个动画剪辑的周期
+		animationClip.duration = frames.length * this.speed; // 整个动画剪辑的周期
 		animationClip.wrapMode = this.wrapMode;
 
 		this.animationClip = animationClip;

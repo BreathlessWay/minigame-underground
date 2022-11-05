@@ -16,10 +16,12 @@ import { createUINode } from "db://assets/utils";
 import levels, { ILevel } from "db://assets/levels";
 import { TILE_HEIGHT, TILE_WIDTH } from "db://assets/scripts/tile/TileManager";
 import {
+	DIRECTION_ENUM,
 	ENTITY_STATE_ENUM,
 	ENTITY_TYPE_ENUM,
 	EVENT_ENUM,
 } from "db://assets/enums";
+import { SmokeManager } from "db://assets/scripts/smoke/SmokeManager";
 
 const { ccclass } = _decorator;
 
@@ -27,6 +29,8 @@ const { ccclass } = _decorator;
 export class BattleManager extends Component {
 	level: ILevel;
 	stage: Node;
+	smokeLayer: Node;
+
 	start() {
 		this.generateStage();
 		this.initLevel();
@@ -39,11 +43,13 @@ export class BattleManager extends Component {
 			this.checkArrived,
 			this
 		);
+		EventManager.Instance.on(EVENT_ENUM.SHOW_SMOKE, this.generateSmoke, this);
 	}
 
 	onDestroy() {
 		EventManager.Instance.off(EVENT_ENUM.NEXT_LEVEL, this.nextLevel);
 		EventManager.Instance.off(EVENT_ENUM.PLAYER_MOVE_END, this.checkArrived);
+		EventManager.Instance.off(EVENT_ENUM.SHOW_SMOKE, this.generateSmoke);
 	}
 
 	async initLevel() {
@@ -64,6 +70,7 @@ export class BattleManager extends Component {
 				this.generateBursts(),
 				this.generateSpikes(),
 				this.generateEnemies(),
+				this.generateSmokeLayer(),
 			]);
 			// 如果不先将其他元素渲染出来，人物元素可能会被其他元素遮挡
 			this.generatePlayer();
@@ -159,6 +166,40 @@ export class BattleManager extends Component {
 		await Promise.all(promises);
 	}
 
+	generateSmokeLayer() {
+		this.smokeLayer = createUINode();
+		this.smokeLayer.setParent(this.stage);
+	}
+
+	async generateSmoke(x: number, y: number, direction: DIRECTION_ENUM) {
+		const item = DataManager.Instance.smokes.find(
+			(smoke: SmokeManager) => smoke.state === ENTITY_STATE_ENUM.DEATH
+		);
+		if (item) {
+			console.log("cache");
+			item.x = x;
+			item.y = y;
+			item.node.setPosition(
+				item.x * TILE_WIDTH - TILE_WIDTH * 1.5,
+				-item.y * TILE_HEIGHT + TILE_HEIGHT * 1.5
+			);
+			item.direction = direction;
+			item.state = ENTITY_STATE_ENUM.IDLE;
+			return;
+		}
+		const door = createUINode();
+		door.setParent(this.smokeLayer);
+		const smokeManager = door.addComponent(SmokeManager);
+		await smokeManager.init({
+			x,
+			y,
+			direction,
+			state: ENTITY_STATE_ENUM.IDLE,
+			type: ENTITY_TYPE_ENUM.SMOKE,
+		});
+		DataManager.Instance.smokes.push(smokeManager);
+	}
+
 	adaptPosition() {
 		const { mapRowCount, mapColumnCount } = DataManager.Instance,
 			offsetX = (TILE_WIDTH * mapRowCount) / 2,
@@ -168,6 +209,7 @@ export class BattleManager extends Component {
 	}
 
 	checkArrived() {
+		if (!DataManager.Instance.door) return;
 		const { x: doorX, y: doorY, state: doorState } = DataManager.Instance.door;
 		const { x: playerX, y: playerY } = DataManager.Instance.player;
 		if (
