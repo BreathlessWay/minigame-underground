@@ -4,6 +4,8 @@ import { TileMapManager } from "db://assets/scripts/tile/TileMapManager";
 import { PlayerManager } from "db://assets/scripts/player/PlayerManager";
 import { WoodenSkeletonManager } from "db://assets/scripts/woodenskeleton/WoodenSkeletonManager";
 import { DoorManager } from "db://assets/scripts/door/DoorManager";
+import { IronSkeletonManager } from "db://assets/scripts/ironskeleton/IronSkeletonManager";
+import { BurstManager } from "db://assets/scripts/burst/BurstManager";
 
 import EventManager from "db://assets/stores/EventManager";
 import DataManager from "db://assets/stores/DataManager";
@@ -18,7 +20,6 @@ import {
 	ENTITY_TYPE_ENUM,
 	EVENT_ENUM,
 } from "db://assets/enums";
-import { IronSkeletonManager } from "db://assets/scripts/ironskeleton/IronSkeletonManager";
 
 const { ccclass } = _decorator;
 
@@ -51,10 +52,13 @@ export class BattleManager extends Component {
 			DataManager.Instance.mapRowCount = this.level.mapInfo.length;
 			DataManager.Instance.mapColumnCount = this.level.mapInfo[0].length;
 
-			this.generateTileMap();
-			this.generateDoor();
+			await Promise.all([
+				this.generateTileMap(),
+				this.generateDoor(),
+				this.generateBursts(),
+				this.generateEnemies(),
+			]);
 			this.generatePlayer();
-			this.generateEnemies();
 		}
 	}
 
@@ -87,8 +91,8 @@ export class BattleManager extends Component {
 		player.setParent(this.stage);
 		const playerManager = player.addComponent(PlayerManager);
 		await playerManager.init({
-			x: 2,
-			y: 8,
+			x: 1,
+			y: 7,
 			type: ENTITY_TYPE_ENUM.PLAYER,
 			direction: DIRECTION_ENUM.TOP,
 			state: ENTITY_STATE_ENUM.IDLE,
@@ -103,7 +107,7 @@ export class BattleManager extends Component {
 		const woodenSkeletonManager = enemies.addComponent(WoodenSkeletonManager);
 		await woodenSkeletonManager.init({
 			x: 7,
-			y: 7,
+			y: 3,
 			type: ENTITY_TYPE_ENUM.SKELETON_WOODEN,
 			direction: DIRECTION_ENUM.TOP,
 			state: ENTITY_STATE_ENUM.IDLE,
@@ -114,7 +118,7 @@ export class BattleManager extends Component {
 		enemies1.setParent(this.stage);
 		const ironSkeletonManager = enemies1.addComponent(IronSkeletonManager);
 		await ironSkeletonManager.init({
-			x: 2,
+			x: 3,
 			y: 2,
 			type: ENTITY_TYPE_ENUM.SKELETON_IRON,
 			direction: DIRECTION_ENUM.TOP,
@@ -127,8 +131,40 @@ export class BattleManager extends Component {
 		const door = createUINode();
 		door.setParent(this.stage);
 		const doorManager = door.addComponent(DoorManager);
-		await doorManager.init();
+		await doorManager.init({
+			x: 9.5,
+			y: 1,
+			type: ENTITY_TYPE_ENUM.DOOR,
+			direction: DIRECTION_ENUM.LEFT,
+			state: ENTITY_STATE_ENUM.IDLE,
+		});
 		DataManager.Instance.door = doorManager;
+	}
+
+	async generateBursts() {
+		const bursts = createUINode();
+		bursts.setParent(this.stage);
+		const burstManager = bursts.addComponent(BurstManager);
+		await burstManager.init({
+			x: 1,
+			y: 5,
+			type: ENTITY_TYPE_ENUM.BURST,
+			direction: DIRECTION_ENUM.BOTTOM,
+			state: ENTITY_STATE_ENUM.IDLE,
+		});
+		DataManager.Instance.bursts.push(burstManager);
+
+		const bursts1 = createUINode();
+		bursts1.setParent(this.stage);
+		const burstManager1 = bursts1.addComponent(BurstManager);
+		await burstManager1.init({
+			x: 1,
+			y: 6,
+			type: ENTITY_TYPE_ENUM.BURST,
+			direction: DIRECTION_ENUM.TOP,
+			state: ENTITY_STATE_ENUM.IDLE,
+		});
+		DataManager.Instance.bursts.push(burstManager1);
 	}
 
 	adaptPosition() {

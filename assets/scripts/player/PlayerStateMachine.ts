@@ -18,6 +18,7 @@ import BlockTurnLeftSubStateMachine from "db://assets/scripts/player/BlockTurnLe
 import BlockTurnRightSubStateMachine from "db://assets/scripts/player/BlockTurnRightSubStateMachine";
 import DeathSubStateMachine from "db://assets/scripts/player/DeathSubStateMachine";
 import AttackSubStateMachine from "db://assets/scripts/player/AttackSubStateMachine";
+import AirDeathSubStateMachine from "db://assets/scripts/player/AirDeathSubStateMachine";
 
 import {
 	ENTITY_STATE_ENUM,
@@ -48,6 +49,7 @@ export class PlayerStateMachine extends StateMachine {
 		this.params.set(PARAMS_NAME_ENUM.TURNLEFT, getInitParamsTrigger());
 		this.params.set(PARAMS_NAME_ENUM.TURNRIGHT, getInitParamsTrigger());
 		this.params.set(PARAMS_NAME_ENUM.DEATH, getInitParamsTrigger());
+		this.params.set(PARAMS_NAME_ENUM.AIRDEATH, getInitParamsTrigger());
 		this.params.set(PARAMS_NAME_ENUM.ATTACK, getInitParamsTrigger());
 
 		this.params.set(PARAMS_NAME_ENUM.BLOCKFRONT, getInitParamsTrigger());
@@ -102,6 +104,10 @@ export class PlayerStateMachine extends StateMachine {
 			new DeathSubStateMachine(this)
 		);
 		this.stateMachines.set(
+			PARAMS_NAME_ENUM.AIRDEATH,
+			new AirDeathSubStateMachine(this)
+		);
+		this.stateMachines.set(
 			PARAMS_NAME_ENUM.ATTACK,
 			new AttackSubStateMachine(this)
 		);
@@ -128,6 +134,7 @@ export class PlayerStateMachine extends StateMachine {
 			case this.stateMachines.get(PARAMS_NAME_ENUM.BLOCKTURNLEFT):
 			case this.stateMachines.get(PARAMS_NAME_ENUM.BLOCKTURNRIGHT):
 			case this.stateMachines.get(PARAMS_NAME_ENUM.DEATH):
+			case this.stateMachines.get(PARAMS_NAME_ENUM.AIRDEATH):
 			case this.stateMachines.get(PARAMS_NAME_ENUM.ATTACK):
 			case this.stateMachines.get(PARAMS_NAME_ENUM.IDLE): {
 				if (this.params.get(PARAMS_NAME_ENUM.IDLE).value) {
@@ -136,6 +143,10 @@ export class PlayerStateMachine extends StateMachine {
 				}
 				if (this.params.get(PARAMS_NAME_ENUM.DEATH).value) {
 					this.currentState = this.stateMachines.get(PARAMS_NAME_ENUM.DEATH);
+					return;
+				}
+				if (this.params.get(PARAMS_NAME_ENUM.AIRDEATH).value) {
+					this.currentState = this.stateMachines.get(PARAMS_NAME_ENUM.AIRDEATH);
 					return;
 				}
 				if (this.params.get(PARAMS_NAME_ENUM.ATTACK).value) {
