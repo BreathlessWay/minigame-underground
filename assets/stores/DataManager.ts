@@ -28,7 +28,7 @@ export default class DataManager extends Singleton {
 	mapInfo: Array<Array<ITile>>;
 	mapRowCount: number;
 	mapColumnCount: number;
-	levelIndex = 8;
+	levelIndex = 2;
 	tileInfo: Array<TileManager[]>;
 	player: PlayerManager;
 	enemies: EnemyManager[] = [];

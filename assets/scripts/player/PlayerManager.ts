@@ -29,6 +29,11 @@ export class PlayerManager extends EntityManager {
 		super.update();
 	}
 
+	onDestroy() {
+		EventManager.Instance.off(EVENT_ENUM.PLAYER_CTRL, this.moveHandler);
+		EventManager.Instance.off(EVENT_ENUM.ATTACK_PLAYER, this.onDead);
+	}
+
 	async init(params: IEntity) {
 		this.fsm = this.addComponent(PlayerStateMachine);
 		await this.fsm.init();
