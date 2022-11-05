@@ -4,9 +4,9 @@ import SpikesSubStateMachine from "db://assets/scripts/spikes/SpikesSubStateMach
 
 import { SPIKES_COUNT_ENUM } from "db://assets/enums";
 
-const BASE_URL = "texture/spikes/spikesone";
+const BASE_URL = "texture/spikes/spikesthree";
 
-export default class SpikesOneSubStateMachine extends SpikesSubStateMachine {
+export default class SpikesThreeSubStateMachine extends SpikesSubStateMachine {
 	constructor(fsm: StateMachine) {
 		super(fsm);
 		this.stateMachines.set(
@@ -20,6 +20,14 @@ export default class SpikesOneSubStateMachine extends SpikesSubStateMachine {
 		this.stateMachines.set(
 			SPIKES_COUNT_ENUM.TWO,
 			new State(fsm, `${BASE_URL}/two`)
+		);
+		this.stateMachines.set(
+			SPIKES_COUNT_ENUM.TWO,
+			new State(fsm, `${BASE_URL}/three`)
+		);
+		this.stateMachines.set(
+			SPIKES_COUNT_ENUM.FOUR,
+			new State(fsm, `${BASE_URL}/four`)
 		);
 	}
 }

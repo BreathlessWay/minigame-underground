@@ -1,15 +1,16 @@
 import { _decorator, Animation } from "cc";
 
 import SpikesOneSubStateMachine from "db://assets/scripts/spikes/SpikesOneSubStateMachine";
+import SpikesTwoSubStateMachine from "db://assets/scripts/spikes/SpikesTwoSubStateMachine";
+import SpikesThreeSubStateMachine from "db://assets/scripts/spikes/SpikesThreeSubStateMachine";
+import SpikesFourSubStateMachine from "db://assets/scripts/spikes/SpikesFourSubStateMachine";
 
 import {
 	getInitParamsNumber,
 	StateMachine,
 } from "db://assets/utils/StateMachine";
-import { EntityManager } from "db://assets/utils/EntityManager";
 
 import {
-	ENTITY_STATE_ENUM,
 	ENTITY_TYPE_ENUM,
 	PARAMS_NAME_ENUM,
 	SPIKES_TYPE_MAP_TOTAL_COUNT_ENUM,
@@ -40,15 +41,15 @@ export class SpikesStateMachine extends StateMachine {
 		);
 		this.stateMachines.set(
 			ENTITY_TYPE_ENUM.SPIKES_TWO,
-			new SpikesOneSubStateMachine(this)
+			new SpikesTwoSubStateMachine(this)
 		);
 		this.stateMachines.set(
 			ENTITY_TYPE_ENUM.SPIKES_THREE,
-			new SpikesOneSubStateMachine(this)
+			new SpikesThreeSubStateMachine(this)
 		);
 		this.stateMachines.set(
 			ENTITY_TYPE_ENUM.SPIKES_FOUR,
-			new SpikesOneSubStateMachine(this)
+			new SpikesFourSubStateMachine(this)
 		);
 	}
 
@@ -73,6 +74,24 @@ export class SpikesStateMachine extends StateMachine {
 				if (totalCount === SPIKES_TYPE_MAP_TOTAL_COUNT_ENUM.SPIKES_ONE) {
 					this.currentState = this.stateMachines.get(
 						ENTITY_TYPE_ENUM.SPIKES_ONE
+					);
+					return;
+				}
+				if (totalCount === SPIKES_TYPE_MAP_TOTAL_COUNT_ENUM.SPIKES_TWO) {
+					this.currentState = this.stateMachines.get(
+						ENTITY_TYPE_ENUM.SPIKES_TWO
+					);
+					return;
+				}
+				if (totalCount === SPIKES_TYPE_MAP_TOTAL_COUNT_ENUM.SPIKES_THREE) {
+					this.currentState = this.stateMachines.get(
+						ENTITY_TYPE_ENUM.SPIKES_THREE
+					);
+					return;
+				}
+				if (totalCount === SPIKES_TYPE_MAP_TOTAL_COUNT_ENUM.SPIKES_FOUR) {
+					this.currentState = this.stateMachines.get(
+						ENTITY_TYPE_ENUM.SPIKES_FOUR
 					);
 					return;
 				}
