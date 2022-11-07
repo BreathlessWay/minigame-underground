@@ -174,7 +174,7 @@ export enum SHAKE_TYPE_ENUM {
 }
 
 export enum SCENE_ENUM {
-	Loading = "Loading",
-	Start = "Start",
-	Battle = "Battle",
+	Loading = "loading",
+	Start = "start",
+	Battle = "battle",
 }

@@ -45,4 +45,8 @@ export default class FadeManager extends Singleton {
 	fadeOut(duration = DEFAULT_FADE_DURATION) {
 		return this.fader.fadeOut(duration);
 	}
+
+	async mask() {
+		await this.fader.mask();
+	}
 }

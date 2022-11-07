@@ -33,6 +33,7 @@ export class BattleManager extends Component {
 	level: ILevel;
 	stage: Node;
 	smokeLayer: Node;
+	private isInit = false;
 
 	start() {
 		this.generateStage();
@@ -68,7 +69,11 @@ export class BattleManager extends Component {
 			level = levels[`level${levelIndex}`];
 
 		if (level) {
-			await FadeManager.Instance.fadeIn();
+			if (this.isInit) {
+				await FadeManager.Instance.fadeIn();
+			} else {
+				await FadeManager.Instance.mask();
+			}
 			this.clearLevel();
 			this.level = level;
 
@@ -88,6 +93,9 @@ export class BattleManager extends Component {
 			await this.generatePlayer();
 
 			await FadeManager.Instance.fadeOut();
+			this.isInit = true;
+		} else {
+			this.quitBattle();
 		}
 	}
 
@@ -236,8 +244,8 @@ export class BattleManager extends Component {
 		}
 	}
 
-	quitBattle() {
-		this.node.destroy();
+	async quitBattle() {
+		await FadeManager.Instance.fadeIn();
 		director.loadScene(SCENE_ENUM.Start);
 	}
 
