@@ -8,7 +8,7 @@ import { IronSkeletonManager } from "db://assets/scripts/ironskeleton/IronSkelet
 import { BurstManager } from "db://assets/scripts/burst/BurstManager";
 import { SpikesManager } from "db://assets/scripts/spikes/SpikesManager";
 import { SmokeManager } from "db://assets/scripts/smoke/SmokeManager";
-import { SharkManager } from "db://assets/scripts/ui/SharkManager";
+import { ShakeManager } from "db://assets/scripts/ui/ShakeManager";
 
 import EventManager from "db://assets/stores/EventManager";
 import DataManager from "db://assets/stores/DataManager";
@@ -95,7 +95,7 @@ export class BattleManager extends Component {
 	generateStage() {
 		this.stage = createUINode();
 		this.stage.setParent(this.node);
-		this.stage.addComponent(SharkManager);
+		this.stage.addComponent(ShakeManager);
 	}
 
 	async generateTileMap() {
@@ -210,7 +210,7 @@ export class BattleManager extends Component {
 			offsetX = (TILE_WIDTH * mapRowCount) / 2,
 			offsetY = (TILE_HEIGHT * mapColumnCount) / 2 + 100;
 
-		this.stage.getComponent(SharkManager).stop();
+		this.stage.getComponent(ShakeManager).stop();
 		this.stage.setPosition(-offsetX, offsetY);
 	}
 

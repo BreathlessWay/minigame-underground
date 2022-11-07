@@ -12,6 +12,7 @@ import {
 	DIRECTION_ENUM,
 	ENTITY_STATE_ENUM,
 	EVENT_ENUM,
+	SHAKE_TYPE_ENUM,
 } from "db://assets/enums";
 import { IEntity } from "db://assets/levels";
 
@@ -91,7 +92,102 @@ export class PlayerManager extends EntityManager {
 			return;
 		}
 		if (this.willBlock(direction)) {
-			EventManager.Instance.emit(EVENT_ENUM.SCREEN_SHAKE);
+			if (direction === CONTROLLER_ENUM.TOP) {
+				EventManager.Instance.emit(
+					EVENT_ENUM.SCREEN_SHAKE,
+					SHAKE_TYPE_ENUM.TOP
+				);
+			}
+			if (direction === CONTROLLER_ENUM.BOTTOM) {
+				EventManager.Instance.emit(
+					EVENT_ENUM.SCREEN_SHAKE,
+					SHAKE_TYPE_ENUM.BOTTOM
+				);
+			}
+			if (direction === CONTROLLER_ENUM.LEFT) {
+				EventManager.Instance.emit(
+					EVENT_ENUM.SCREEN_SHAKE,
+					SHAKE_TYPE_ENUM.LEFT
+				);
+			}
+			if (direction === CONTROLLER_ENUM.RIGHT) {
+				EventManager.Instance.emit(
+					EVENT_ENUM.SCREEN_SHAKE,
+					SHAKE_TYPE_ENUM.RIGHT
+				);
+			}
+			if (
+				direction === CONTROLLER_ENUM.TURNLEFT &&
+				this.direction === DIRECTION_ENUM.TOP
+			) {
+				EventManager.Instance.emit(
+					EVENT_ENUM.SCREEN_SHAKE,
+					SHAKE_TYPE_ENUM.LEFT
+				);
+			}
+			if (
+				direction === CONTROLLER_ENUM.TURNLEFT &&
+				this.direction === DIRECTION_ENUM.LEFT
+			) {
+				EventManager.Instance.emit(
+					EVENT_ENUM.SCREEN_SHAKE,
+					SHAKE_TYPE_ENUM.BOTTOM
+				);
+			}
+			if (
+				direction === CONTROLLER_ENUM.TURNLEFT &&
+				this.direction === DIRECTION_ENUM.BOTTOM
+			) {
+				EventManager.Instance.emit(
+					EVENT_ENUM.SCREEN_SHAKE,
+					SHAKE_TYPE_ENUM.RIGHT
+				);
+			}
+			if (
+				direction === CONTROLLER_ENUM.TURNLEFT &&
+				this.direction === DIRECTION_ENUM.RIGHT
+			) {
+				EventManager.Instance.emit(
+					EVENT_ENUM.SCREEN_SHAKE,
+					SHAKE_TYPE_ENUM.TOP
+				);
+			}
+			if (
+				direction === CONTROLLER_ENUM.TURNRIGHT &&
+				this.direction === DIRECTION_ENUM.TOP
+			) {
+				EventManager.Instance.emit(
+					EVENT_ENUM.SCREEN_SHAKE,
+					SHAKE_TYPE_ENUM.RIGHT
+				);
+			}
+			if (
+				direction === CONTROLLER_ENUM.TURNRIGHT &&
+				this.direction === DIRECTION_ENUM.LEFT
+			) {
+				EventManager.Instance.emit(
+					EVENT_ENUM.SCREEN_SHAKE,
+					SHAKE_TYPE_ENUM.TOP
+				);
+			}
+			if (
+				direction === CONTROLLER_ENUM.TURNRIGHT &&
+				this.direction === DIRECTION_ENUM.BOTTOM
+			) {
+				EventManager.Instance.emit(
+					EVENT_ENUM.SCREEN_SHAKE,
+					SHAKE_TYPE_ENUM.LEFT
+				);
+			}
+			if (
+				direction === CONTROLLER_ENUM.TURNRIGHT &&
+				this.direction === DIRECTION_ENUM.RIGHT
+			) {
+				EventManager.Instance.emit(
+					EVENT_ENUM.SCREEN_SHAKE,
+					SHAKE_TYPE_ENUM.BOTTOM
+				);
+			}
 			return;
 		}
 
