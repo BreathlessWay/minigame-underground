@@ -91,8 +91,11 @@ export class PlayerManager extends EntityManager {
 
 		const enemyId = this.willAttack(direction);
 		if (enemyId) {
+			EventManager.Instance.emit(EVENT_ENUM.RECORD_STEP);
+			this.state = ENTITY_STATE_ENUM.ATTACK;
 			EventManager.Instance.emit(EVENT_ENUM.ATTACK_ENEMY, enemyId);
 			EventManager.Instance.emit(EVENT_ENUM.DOOR_OPEN);
+			EventManager.Instance.emit(EVENT_ENUM.PLAYER_MOVE_END);
 			return;
 		}
 		if (this.willBlock(direction)) {
@@ -208,6 +211,7 @@ export class PlayerManager extends EntityManager {
 	}
 
 	move(direction: CONTROLLER_ENUM) {
+		EventManager.Instance.emit(EVENT_ENUM.RECORD_STEP);
 		if (direction === CONTROLLER_ENUM.TOP) {
 			this.isMoving = true;
 			this.targetY -= 1;
