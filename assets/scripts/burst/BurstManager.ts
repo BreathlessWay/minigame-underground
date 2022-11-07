@@ -8,7 +8,11 @@ import DataManager from "db://assets/stores/DataManager";
 import { EntityManager } from "db://assets/utils/EntityManager";
 
 import { IEntity } from "db://assets/levels";
-import { ENTITY_STATE_ENUM, EVENT_ENUM } from "db://assets/enums";
+import {
+	ENTITY_STATE_ENUM,
+	EVENT_ENUM,
+	SHAKE_TYPE_ENUM,
+} from "db://assets/enums";
 import { TILE_HEIGHT, TILE_WIDTH } from "db://assets/scripts/tile/TileManager";
 
 const { ccclass } = _decorator;
@@ -46,6 +50,10 @@ export class BurstManager extends EntityManager {
 
 		if (state === ENTITY_STATE_ENUM.ATTACK) {
 			this.state = ENTITY_STATE_ENUM.DEATH;
+			EventManager.Instance.emit(
+				EVENT_ENUM.SCREEN_SHAKE,
+				SHAKE_TYPE_ENUM.BOTTOM
+			);
 			if (x === playerX && y === playerY) {
 				EventManager.Instance.emit(
 					EVENT_ENUM.ATTACK_PLAYER,

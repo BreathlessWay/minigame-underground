@@ -21,7 +21,7 @@ export class ShakeManager extends Component {
 		if (this.isShaking) {
 			const curSecond = (game.totalTime - this.oldTime) / 1000,
 				duration = 200,
-				amount = 16,
+				amount = 1.6,
 				frequency = 12,
 				totalSecond = duration / 1000,
 				offset = amount * Math.sin(frequency * Math.PI * curSecond);

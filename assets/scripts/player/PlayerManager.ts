@@ -45,6 +45,10 @@ export class PlayerManager extends EntityManager {
 		EventManager.Instance.on(EVENT_ENUM.ATTACK_PLAYER, this.onDead, this);
 	}
 
+	onAttackShake(type: SHAKE_TYPE_ENUM) {
+		EventManager.Instance.emit(EVENT_ENUM.SCREEN_SHAKE, type);
+	}
+
 	updatePosition() {
 		if (this.x < this.targetX) {
 			this.x += this.speed;

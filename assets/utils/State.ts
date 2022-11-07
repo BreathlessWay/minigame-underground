@@ -14,7 +14,8 @@ export default class State {
 		private fsm: StateMachine,
 		private path: string,
 		private wrapMode = AnimationClip.WrapMode.Normal,
-		private speed = ANIMATION_SPEED
+		private speed = ANIMATION_SPEED,
+		private events: any[] = []
 	) {
 		this.init();
 	}
@@ -43,6 +44,11 @@ export default class State {
 		animationClip.name = this.path;
 		animationClip.duration = frames.length * this.speed; // 整个动画剪辑的周期
 		animationClip.wrapMode = this.wrapMode;
+
+		for (const event of this.events) {
+			animationClip.events.push(event);
+		}
+		animationClip.updateEventDatas();
 
 		this.animationClip = animationClip;
 	}
