@@ -11,6 +11,7 @@ import { SmokeManager } from "db://assets/scripts/smoke/SmokeManager";
 
 import EventManager from "db://assets/stores/EventManager";
 import DataManager from "db://assets/stores/DataManager";
+import FadeManager from "db://assets/utils/FadeManager";
 
 import { createUINode } from "db://assets/utils";
 
@@ -22,7 +23,6 @@ import {
 	ENTITY_TYPE_ENUM,
 	EVENT_ENUM,
 } from "db://assets/enums";
-import FadeManager from "db://assets/utils/FadeManager";
 
 const { ccclass } = _decorator;
 
