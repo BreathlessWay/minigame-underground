@@ -39,12 +39,10 @@ export default class FadeManager extends Singleton {
 	}
 
 	fadeIn(duration = DEFAULT_FADE_DURATION) {
-		console.log("in");
 		return this.fader.fadeIn(duration);
 	}
 
 	fadeOut(duration = DEFAULT_FADE_DURATION) {
-		console.log("out");
 		return this.fader.fadeOut(duration);
 	}
 }
