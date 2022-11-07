@@ -22,6 +22,7 @@ import {
 	ENTITY_TYPE_ENUM,
 	EVENT_ENUM,
 } from "db://assets/enums";
+import FadeManager from "db://assets/utils/FadeManager";
 
 const { ccclass } = _decorator;
 
@@ -57,6 +58,7 @@ export class BattleManager extends Component {
 			level = levels[`level${levelIndex}`];
 
 		if (level) {
+			await FadeManager.Instance.fadeIn();
 			this.clearLevel();
 			this.level = level;
 
@@ -70,10 +72,12 @@ export class BattleManager extends Component {
 				this.generateBursts(),
 				this.generateSpikes(),
 				this.generateEnemies(),
-				this.generateSmokeLayer(),
+				this.generateSmokeLayer(), // 占位符，承载烟雾，否则烟雾后来渲染会遮住人物
 			]);
 			// 如果不先将其他元素渲染出来，人物元素可能会被其他元素遮挡
-			this.generatePlayer();
+			await this.generatePlayer();
+
+			await FadeManager.Instance.fadeOut();
 		}
 	}
 
@@ -166,7 +170,7 @@ export class BattleManager extends Component {
 		await Promise.all(promises);
 	}
 
-	generateSmokeLayer() {
+	async generateSmokeLayer() {
 		this.smokeLayer = createUINode();
 		this.smokeLayer.setParent(this.stage);
 	}
