@@ -90,7 +90,10 @@ export class PlayerManager extends EntityManager {
 			EventManager.Instance.emit(EVENT_ENUM.DOOR_OPEN);
 			return;
 		}
-		if (this.willBlock(direction)) return;
+		if (this.willBlock(direction)) {
+			EventManager.Instance.emit(EVENT_ENUM.SCREEN_SHAKE);
+			return;
+		}
 
 		this.move(direction);
 	}
