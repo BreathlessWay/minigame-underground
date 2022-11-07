@@ -7,6 +7,7 @@ import { DoorManager } from "db://assets/scripts/door/DoorManager";
 import { IronSkeletonManager } from "db://assets/scripts/ironskeleton/IronSkeletonManager";
 import { BurstManager } from "db://assets/scripts/burst/BurstManager";
 import { SpikesManager } from "db://assets/scripts/spikes/SpikesManager";
+import { SmokeManager } from "db://assets/scripts/smoke/SmokeManager";
 
 import EventManager from "db://assets/stores/EventManager";
 import DataManager from "db://assets/stores/DataManager";
@@ -21,7 +22,6 @@ import {
 	ENTITY_TYPE_ENUM,
 	EVENT_ENUM,
 } from "db://assets/enums";
-import { SmokeManager } from "db://assets/scripts/smoke/SmokeManager";
 
 const { ccclass } = _decorator;
 
@@ -176,7 +176,6 @@ export class BattleManager extends Component {
 			(smoke: SmokeManager) => smoke.state === ENTITY_STATE_ENUM.DEATH
 		);
 		if (item) {
-			console.log("cache");
 			item.x = x;
 			item.y = y;
 			item.node.setPosition(

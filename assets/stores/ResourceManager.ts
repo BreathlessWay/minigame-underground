@@ -4,7 +4,7 @@ import Singleton from "db://assets/utils/Singleton";
 
 const { ccclass } = _decorator;
 
-@ccclass("BattleManager")
+@ccclass("ResourceManager")
 export default class ResourceManager extends Singleton {
 	static get Instance() {
 		return super.GetInstance<ResourceManager>();
